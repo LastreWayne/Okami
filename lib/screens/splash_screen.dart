@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [ 
-            Image.asset('assets/images/App logo.png', width: 180),
+            Image.asset('assets/images/app_logo.png', width: 180),
             const SizedBox(height: 24),
             Text(
              'ŌKAMI',
