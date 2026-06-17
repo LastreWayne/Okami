@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/screens/splash_screen.dart';
-import 'package:okami/widgets/app_widgets.dart';
 
 void main() {
   runApp(const OkamiApp());
