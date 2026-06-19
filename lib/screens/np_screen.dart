@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'week_org_screen.dart';
+import 'locking_in_screen.dart';
 
 class NeuPlaScreen extends StatelessWidget {
   const NeuPlaScreen({super.key});
@@ -42,7 +43,12 @@ class NeuPlaScreen extends StatelessWidget {
                       icon: Icons.lock_outline,
                       label: 'Lock in',
                       onTap: () {
-                        //Por ahora sin funcionalidad, Navega al Locking in Screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LockingInScreen(),
+                          ),
+                        );
                       },
                     ),
                   ),

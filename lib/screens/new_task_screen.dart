@@ -11,7 +11,7 @@ class NewTaskScreen extends StatelessWidget {
         title: const Text('New Task'),
       ),
 
-      // Scroll para el cuestionario
+      // Scroll para el cuestionariocG
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
