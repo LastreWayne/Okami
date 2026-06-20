@@ -1,5 +1,6 @@
 import 'dart:async'; //import para el timer
 import 'package:flutter/material.dart';
+import 'package:okami/screens/neuroplasticity/summary_screen.dart';
 
 class LockInScreen extends StatefulWidget {
   const LockInScreen({super.key});
@@ -214,9 +215,17 @@ class _LockInScreenState extends State<LockInScreen> {
     }
   }
 
+  //Pasar los datos al summary screen
   void _goToSummary() {
-    Navigator.pop(context);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SummaryScreen(
+        taskTitle: 'Titulo ejemplo', 
+        plannedSeconds: _totalSeconds,
+        actualSeconds: _totalSeconds - _remainingSeconds,
+        completedFully: _remainingSeconds == 0
+        ),
+      ),
+    );
   }
-
-
 }

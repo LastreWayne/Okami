@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'body_screen.dart';
-import 'np_screen.dart';
-import 'motion_screen.dart';
+import 'home/home_screen.dart';
+import 'body/body_screen.dart';
+import 'neuroplasticity/np_screen.dart';
+import 'motion/motion_screen.dart';
 
 // Stateful para la estructura de navegacion
 class MainScreen extends StatefulWidget {
