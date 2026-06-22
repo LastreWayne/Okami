@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:okami/models/task_model.dart';
 
 class FieldLabel extends StatelessWidget {
   final String text;
-
   const FieldLabel(this.text, {super.key});
 
   @override
@@ -17,91 +17,93 @@ class FieldLabel extends StatelessWidget {
   }
 }
 
+
 //Selector de prioridad
-class PrioritySelector extends StatefulWidget {
-  const PrioritySelector({super.key});
+class PrioritySelector extends StatelessWidget {
+  final TaskPriority value;
+  final ValueChanged<TaskPriority> onChanged;
 
-  @override
-  State<PrioritySelector> createState() => _PrioritySelectorState();
-}
-
-class _PrioritySelectorState extends State <PrioritySelector> {
-  String _selected = 'B'; //Prioridad intermedia como el valor inicial
+  const PrioritySelector({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SegmentedButton<String>(
+    return SegmentedButton(
       segments: const [
-        ButtonSegment(value: 'A', label: Text('A')),
-        ButtonSegment(value: 'B', label: Text('B')),
-        ButtonSegment(value: 'C', label: Text('C')),
+        ButtonSegment(value: TaskPriority.a, label: Text('A')),
+        ButtonSegment(value: TaskPriority.b, label: Text('B')),
+        ButtonSegment(value: TaskPriority.c, label: Text('C')),
       ],
-      selected: {_selected},
-      onSelectionChanged: (newSelection) {
-        setState(() {
-          _selected = newSelection.first;
-        });
-      },
+      selected: {value},
+      onSelectionChanged: (newSelection) => onChanged(newSelection.first),
     );
   }
 }
 
+
 //Selector de categoria
-class CategorySelector extends StatefulWidget {
-  const CategorySelector({super.key});
+class CategorySelector extends StatelessWidget {
+  final TaskCategory value;
+  final ValueChanged<TaskCategory> onChanged;
 
-  @override
-  State<CategorySelector> createState() => _CategorySelectorState();
-}
+  const CategorySelector({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
-class _CategorySelectorState extends State<CategorySelector> {
-  String _selected = 'Neuroplasticity';
+  //Helper para el display de los nombres de las categorias
+  String _label(TaskCategory cat) {
+    switch (cat) {
+      case TaskCategory.body:
+        return 'Body';
+      case TaskCategory.neuroplasticity:
+        return 'Neuroplasticity';
+      case TaskCategory.motion:
+        return 'Motion';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 12,
-      children: ['Body', 'Neuroplasticity', 'Motion'].map((cat) {
-        final isSelected = _selected == cat;
+      spacing: 8,
+      children: TaskCategory.values.map((cat) {
         return ChoiceChip(
-          label: Text(cat),
-          selected: isSelected,
-          onSelected: (_) {
-            setState(() {
-              _selected = cat;
-            });
-          },
+          label: Text(_label(cat)),
+          selected: value == cat,
+          onSelected: (_) => onChanged(cat),
         );
       }).toList(),
     );
   }
 }
 
+
 //Togle de repeticion
-class RepeatToggle extends StatefulWidget {
-  const RepeatToggle({super.key});
+class RepeatToggle extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool> onChanged;
 
-  @override
-  State<RepeatToggle> createState() => _RepeatToggleState();
-}
-
-class _RepeatToggleState extends State<RepeatToggle> {
-  bool _repeats = false;
+  const RepeatToggle({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
-        _repeats ? 'Every week' : 'Does not repeat',
+        value ? 'Every week' : 'Does not repeat',
         style: const TextStyle(fontSize: 14),
       ),
-      value: _repeats,
-      onChanged: (newValue) {
-        setState(() {
-          _repeats = newValue;
-        });
-      },
+      value: value,
+      onChanged: onChanged,
     );
   }
 }

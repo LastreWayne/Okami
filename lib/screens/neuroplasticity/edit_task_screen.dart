@@ -1,10 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:okami/models/task_model.dart';
+import 'package:okami/providers/task_provider.dart';
 import '../../widgets/task_form_widgets.dart';
 
-class EditTaskScreen extends StatelessWidget {
-  const EditTaskScreen({super.key});
+class EditTaskScreen extends StatefulWidget {
+  //La task que se va a editar
+  final Task task;
+  const EditTaskScreen({super.key, required this.task});
 
-@override
+  @override
+  State<EditTaskScreen> createState() => _EditTaskScreenState();
+}
+
+class _EditTaskScreenState extends State<EditTaskScreen> {
+  //Controlers, variables para saber lo que digo en los textfields
+  late final TextEditingController _titleController;
+  late final TextEditingController _descriptionController;
+  late final TextEditingController _durationController;
+
+  //Variables para las elecciones de los demas parametros de una Task
+  late TaskPriority _priority;
+  late TaskCategory _category;
+  late bool _repeatsWeekly;
+  late DateTime _selectedDate;
+
+  //Pre-cargar los valores de la task existente
+  @override
+  void initState() {
+    super.initState();
+    final task = widget.task;
+    _titleController = TextEditingController(text: task.title);
+    _descriptionController = TextEditingController(text: task.description);
+    _durationController =
+        TextEditingController(text: task.durationMinutes.toString());
+    _priority = task.priority;
+    _category = task.category;
+    _repeatsWeekly = task.repeatsWeekly;
+    _selectedDate = task.dateTime;
+  }
+
+  //Deshacerce de los controles cuando se sale de la pagina
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _durationController.dispose();
+    super.dispose();
+  }
+
+  //Guarda los cambios de la task y los manda al provider
+  void _saveChanges() {
+    if (_titleController.text.trim().isEmpty) {//Validacion del titulo
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You need to provide a title')),
+      );
+      return;
+    }
+
+    //copywith conserva el id original y reemplaza lo editado
+    final updatedTask = widget.task.copywith(
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      dateTime: _selectedDate,
+      durationMinutes: int.tryParse(_durationController.text) ?? 30,
+      priority: _priority,
+      category: _category,
+      repeatsWeekly: _repeatsWeekly,
+    );
+
+    //Actualizar la Task en el app state (lista central)
+    context.read<TaskProvider>().updateTask(updatedTask);
+
+    //Cerrar screen
+    Navigator.pop(context);
+  }
+
+  //Elimina la task del app state
+  void _deleteTask() {
+    context.read<TaskProvider>().deleteTask(widget.task.id);
+    Navigator.pop(context); //Cierra el dialog
+    Navigator.pop(context); //Cierra la screen
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -19,9 +98,10 @@ class EditTaskScreen extends StatelessWidget {
           children: [
 
             //Titulo
-            FieldLabel('Title'),
-            const TextField(
-              decoration: InputDecoration(
+            const FieldLabel('Title'),
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
                 hintText: 'The TASK',
                 border: OutlineInputBorder()
               ),
@@ -29,12 +109,13 @@ class EditTaskScreen extends StatelessWidget {
 
             //Descripcion
             const SizedBox(height: 20),
-            FieldLabel('Description'),
-            const TextField(
+            const FieldLabel('Description'),
+            TextField(
+              controller: _descriptionController,
               maxLines: 2,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'What is it about?',
-                border: OutlineInputBorder(), 
+                border: OutlineInputBorder(),
               ),
             ),
 
@@ -46,13 +127,16 @@ class EditTaskScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FieldLabel('Time/Hour'),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: '00:00',
-                          border:  OutlineInputBorder(),
+
+                      const FieldLabel('Date'),
+                      OutlinedButton.icon(
+                        onPressed: _pickDate,
+                        icon: const Icon(Icons.calendar_today, size: 18),
+                        label: Text(
+                          '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
                         )
                       )
+
                     ],
                   ),
                 ),
@@ -62,13 +146,17 @@ class EditTaskScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FieldLabel('Duration'),
-                      const TextField(
-                        decoration: InputDecoration(
+
+                      const FieldLabel('Duration'),
+                      TextField(
+                        controller: _durationController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
                           hintText: 'How much?',
                           border: OutlineInputBorder(),
                         ),
                       ),
+
                     ],
                   ),
                 )
@@ -77,29 +165,34 @@ class EditTaskScreen extends StatelessWidget {
 
             //Prioridad
             const SizedBox(height: 20),
-            FieldLabel('Priority'),
-            const Center(child: PrioritySelector()),
+            const FieldLabel('Priority'),
+            PrioritySelector(
+              value: _priority,
+              onChanged: (p) => setState(() => _priority = p),
+            ),
 
             //Categoria
             const SizedBox(height: 20),
-            FieldLabel('Category'),
-            const Center(child: CategorySelector()),
+            const FieldLabel('Category'),
+            CategorySelector(
+              value: _category,
+              onChanged: (c) => setState(() => _category = c),
+            ),
 
             //Repeticion
             const SizedBox(height: 20),
-            const RepeatToggle(),
-            
+            const FieldLabel('Repeats weekly?'),
+            RepeatToggle(
+              value: _repeatsWeekly,
+              onChanged: (r) => setState(() => _repeatsWeekly = r),
+            ),
 
             //Boton para guardar cambios
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () {
-                  //Por implementar funcionalidad
-
-                  Navigator.pop(context);
-                },
+                onPressed: _saveChanges,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text('Save changes'),
@@ -109,7 +202,6 @@ class EditTaskScreen extends StatelessWidget {
 
             //Boton para eliminar
             const SizedBox(height: 12),
-
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
@@ -140,7 +232,21 @@ class EditTaskScreen extends StatelessWidget {
     );
   }
 
-//Funcion para el mensaje de confirmacion (delete)
+  //Selector de fechas nativo de flutter
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
+  //Funcion para el mensaje de confirmacion (delete)
   void _showDeleteConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -153,10 +259,7 @@ class EditTaskScreen extends StatelessWidget {
             child: const Text('Cancel')
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pop(context);
-            },
+            onPressed: _deleteTask,
             child: Text(
               'Delete',
               style: TextStyle(

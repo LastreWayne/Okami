@@ -1,8 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:okami/models/task_model.dart';
+import 'package:okami/providers/task_provider.dart';
 import '../../widgets/task_form_widgets.dart';
 
-class NewTaskScreen extends StatelessWidget {
+class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
+
+  @override
+  State<NewTaskScreen> createState() => _NewTaskScreenState();
+}
+
+class _NewTaskScreenState extends State<NewTaskScreen> {
+  //Controlers, variables para saber lo que digo en los textfields
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _durationController = TextEditingController();
+
+  //Variables para las elecciones de los demas parametros de una Task
+  TaskPriority _priority = TaskPriority.b;
+  TaskCategory _category = TaskCategory.neuroplasticity;
+  bool _repeatsWeekly = false;
+  DateTime _selectedDate = DateTime.now();
+
+  //Deshacerce de los controles cuando se sale de la pagina
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _durationController.dispose();
+    super.dispose();
+  }
+  
+  //Guarda los datos de la task y los manda al provider
+  void _saveTask() {
+
+    if (_titleController.text.trim().isEmpty) {//Validacion del titulo
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You need to provide a title')),
+      );
+      return;
+    }
+
+    final newTask = Task(
+      id: DateTime.now().millisecondsSinceEpoch.toString(), 
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      dateTime: _selectedDate,
+      durationMinutes: int.tryParse(_durationController.text) ?? 30,
+      priority: _priority,
+      category: _category,
+      repeatsWeekly: _repeatsWeekly,
+    );
+
+    //Agregar la Task al app state (lista central)
+    context.read<TaskProvider>().addTask(newTask);
+
+    //Cerrar screen
+    Navigator.pop(context);
+  }
+  
+
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +77,10 @@ class NewTaskScreen extends StatelessWidget {
           children: [
 
             //Titulo
-            FieldLabel('Title'),
-            const TextField(
-              decoration: InputDecoration(
+            const FieldLabel('Title'),
+            TextField(
+              controller: _titleController,
+              decoration: const InputDecoration(
                 hintText: 'The TASK',
                 border: OutlineInputBorder()
               ),
@@ -29,10 +88,12 @@ class NewTaskScreen extends StatelessWidget {
 
             //Descripcion
             const SizedBox(height: 20),
-            FieldLabel('Descripcion'),
-            const TextField(
+
+            const FieldLabel('Descripcion'),
+            TextField(
+              controller: _descriptionController,
               maxLines: 2,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'What is it about?',
                 border: OutlineInputBorder(), 
               ),
@@ -40,19 +101,23 @@ class NewTaskScreen extends StatelessWidget {
 
             //Fecha/hora y tiempo
             const SizedBox(height: 20),
+
             Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FieldLabel('Date/Hour'),
-                      const TextField(
-                        decoration: InputDecoration(
-                          hintText: '00:00',
-                          border:  OutlineInputBorder(),
-                        )
+
+                      const FieldLabel('Date'),
+                      OutlinedButton.icon(
+                        onPressed: _pickDate,
+                        icon: const Icon(Icons.calendar_today, size: 18),
+                        label: Text(
+                          '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                        ) 
                       )
+
                     ],
                   ),
                 ),
@@ -62,13 +127,17 @@ class NewTaskScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FieldLabel('Duration'),
-                      const TextField(
-                        decoration: InputDecoration(
+
+                      const FieldLabel('Duration'),
+                      TextField(
+                        controller: _durationController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
                           hintText: 'How much?',
                           border: OutlineInputBorder(),
                         ),
                       ),
+
                     ],
                   ),
                 )
@@ -77,17 +146,27 @@ class NewTaskScreen extends StatelessWidget {
 
             //Prioridad
             const SizedBox(height: 20),
-            FieldLabel('Priority'),
-            const Center(child: PrioritySelector()),
+            const FieldLabel('Priority'),
+            PrioritySelector(
+              value: _priority,
+              onChanged: (p) => setState(() => _priority = p),
+            ),
 
             //Categoria
             const SizedBox(height: 20),
-            FieldLabel('Category'),
-            const Center(child: CategorySelector()),
+            const FieldLabel('Category'),
+            CategorySelector(
+              value: _category,
+              onChanged: (c) => setState(() => _category = c),
+            ),
 
             //Repeticion
             const SizedBox(height: 20),
-            const RepeatToggle(),
+            const FieldLabel('Repeats weekly?'),
+            RepeatToggle(
+              value: _repeatsWeekly,
+              onChanged: (r) => setState(() => _repeatsWeekly = r),
+            ),
             
 
             //Boton para guardar
@@ -95,11 +174,7 @@ class NewTaskScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () {
-                  //Por implementar funcionalidad
-
-                  Navigator.pop(context);
-                },
+                onPressed: _saveTask,
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 14),
                   child: Text('Create Task'),
@@ -110,5 +185,19 @@ class NewTaskScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+  
+  //Selector de fechas nativo de flutter
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now().subtract(const Duration(days: 365)),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+    );
+
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
   }
 }

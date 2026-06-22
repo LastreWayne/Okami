@@ -13,10 +13,13 @@ class OkamiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ōkami',
-      theme: AppTheme.darkTheme,
-      home: const SplashScreen(),
+    return ChangeNotifierProvider(
+      create: (_) => TaskProvider(),
+      child: MaterialApp(
+        title: 'Ōkami',
+        theme: AppTheme.darkTheme,
+        home: const SplashScreen(),
+      ),
     );
   }
 }
