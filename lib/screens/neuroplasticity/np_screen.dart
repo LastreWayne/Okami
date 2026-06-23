@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:okami/screens/neuroplasticity/edit_task_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:okami/models/task_model.dart';
+import 'package:okami/providers/task_provider.dart';
 import 'week_org_screen.dart';
 import 'locking_in_screen.dart';
 
@@ -8,6 +12,10 @@ class NeuPlaScreen extends StatelessWidget {
   //Contiene los elementos de la Screen
   @override
   Widget build(BuildContext context) {
+    //Leer tasks del dia 
+    final todayTasks = context.watch<TaskProvider>().tasksByDay(DateTime.now());
+
+
     return Scaffold(
 
       //Safe area para el controlar los overflows con los limites del dispositivos
@@ -29,7 +37,7 @@ class NeuPlaScreen extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                'Hoy', //Por ahora pongo esto luego sera la fecha real
+                'Today',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
 
@@ -43,15 +51,23 @@ class NeuPlaScreen extends StatelessWidget {
                       icon: Icons.lock_outline,
                       label: 'Lock in',
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const LockingInScreen(),
-                          ),
-                        );
+                        final task = context.read<TaskProvider>().currentTask();
+
+                        if (task == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('No Task planned currently')),
+                          );
+                        } else {
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => LockingInScreen(task: task)),
+                          );
+                        }
                       },
                     ),
                   ),
+
+
                   const SizedBox(width: 12),
                   Expanded(
                     child: _buildActionButton(
@@ -73,9 +89,9 @@ class NeuPlaScreen extends StatelessWidget {
 
               const SizedBox(height: 28),
 
-              //Lista de Tasks (Por ahora vacia)
+              //Lista de Tasks
               Expanded(
-                child: _buildEmptyState(context),
+                child: todayTasks.isEmpty ? _buildEmptyState(context) : _buildTaskList(context, todayTasks),
               ),   
             ],
           ),
@@ -85,6 +101,42 @@ class NeuPlaScreen extends StatelessWidget {
   }
 
   //Logica funcional de la screen
+ Widget _buildTaskList(BuildContext context, List<Task> tasks) {
+  return ListView.builder(
+    itemCount: tasks.length,
+    itemBuilder: (context, idx) {
+      final task = tasks[idx];
+      return Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            child: Text(task.priority.name.toUpperCase()),
+          ),
+          title: Text(task.title),
+          subtitle: Text(
+            '${_formatHour(task.dateTime)} · ${task.durationMinutes} min',
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditTaskScreen(task: task))
+            );
+          },
+        ),
+      );
+    },
+  );
+ }
+
+ String _formatHour(DateTime dt) {
+  final h = dt.hour.toString().padLeft(2, '0');
+  final m = dt.minute.toString().padLeft(2, '0');
+  return '$h:$m';
+ }
+
+
+
+
+
 
   //Construir un boton de accion
   Widget _buildActionButton(
@@ -132,7 +184,7 @@ class NeuPlaScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'No tasks yet — hot reload works! 🐺',
+            'No tasks yet',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontSize: 16,
             ),

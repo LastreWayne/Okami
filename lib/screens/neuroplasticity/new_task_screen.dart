@@ -22,6 +22,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   TaskCategory _category = TaskCategory.neuroplasticity;
   bool _repeatsWeekly = false;
   DateTime _selectedDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
 
   //Deshacerce de los controles cuando se sale de la pagina
   @override
@@ -46,7 +47,13 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       id: DateTime.now().millisecondsSinceEpoch.toString(), 
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
-      dateTime: _selectedDate,
+      dateTime: DateTime(
+        _selectedDate.year,
+        _selectedDate.month,
+        _selectedDate.day,
+        _selectedTime.hour,
+        _selectedTime.minute
+      ),
       durationMinutes: int.tryParse(_durationController.text) ?? 30,
       priority: _priority,
       category: _category,
@@ -92,7 +99,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             const FieldLabel('Descripcion'),
             TextField(
               controller: _descriptionController,
-              maxLines: 2,
+              maxLines: 1,
               decoration: const InputDecoration(
                 hintText: 'What is it about?',
                 border: OutlineInputBorder(), 
@@ -109,15 +116,36 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Date'),
-                      OutlinedButton.icon(
-                        onPressed: _pickDate,
-                        icon: const Icon(Icons.calendar_today, size: 18),
-                        label: Text(
-                          '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                        ) 
-                      )
+                      const FieldLabel('Date / Time'),
+                      Row(
+                        children: [
 
+                          //Fecha
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _pickDate,
+                              icon: const Icon(Icons.calendar_today, size: 18),
+                              label: Text(
+                                '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                              ),
+                            ), 
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          //Hora
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _pickTime,
+                              icon: const Icon(Icons.access_time, size: 18),
+                              label: Text(
+                                _selectedTime.format(context)
+                              ),
+                            ) 
+                          )
+                        ],
+
+                      )
                     ],
                   ),
                 ),
@@ -198,6 +226,18 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
     if (picked != null) {
       setState(() => _selectedDate = picked);
+    }
+  }
+
+  //Selector de hora nativo de flutter
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+
+    if (picked != null) {
+      setState(() => _selectedTime = picked);
     }
   }
 }

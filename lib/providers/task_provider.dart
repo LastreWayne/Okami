@@ -40,4 +40,19 @@ class TaskProvider extends ChangeNotifier {
       
     }).toList();
   }
+
+  //Reconocer la task actual dentro de la ventana de tiempo de duracion de la task
+  Task? currentTask() {
+    final now = DateTime.now();
+
+    for (final task in _tasks) {
+      final windowStart = task.dateTime.subtract(const Duration(minutes: 15));
+      final windowEnd = task.dateTime.add(Duration(minutes: task.durationMinutes));
+
+      if (now.isAfter(windowStart) && now.isBefore(windowEnd)) {
+        return task;
+      }
+    }
+    return null;
+  }
 }

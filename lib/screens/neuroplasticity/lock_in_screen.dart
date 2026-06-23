@@ -1,9 +1,11 @@
 import 'dart:async'; //import para el timer
 import 'package:flutter/material.dart';
 import 'package:okami/screens/neuroplasticity/summary_screen.dart';
+import 'package:okami/models/task_model.dart';
 
 class LockInScreen extends StatefulWidget {
-  const LockInScreen({super.key});
+  final Task task;
+  const LockInScreen({super.key, required this.task});
 
   @override  
   State<LockInScreen> createState() => _LockInScreenState();
@@ -12,10 +14,9 @@ class LockInScreen extends StatefulWidget {
 class _LockInScreenState extends State<LockInScreen> {
 
   //Duracion total de la sesion
-  static const int _totalSeconds = 1800; //Por ahora esta fixed este dato (30min)
-
+  late int _totalSeconds;
   //Segundos que quedan
-  int _remainingSeconds = _totalSeconds; //Claramente empieza por el total de segundos
+  late int _remainingSeconds; 
 
   //Herramienta de timer
   Timer? _timer;
@@ -27,7 +28,19 @@ class _LockInScreenState extends State<LockInScreen> {
   @override  
   void initState() {
     super.initState();
+    _calcTime();
     _startTimer();
+  }
+
+  //Calcular tiempo del timer segund el Late
+  void _calcTime() {
+    final now = DateTime.now();
+    final windowEnd = widget.task.dateTime.add(Duration(minutes: widget.task.durationMinutes));
+
+    final secsleft = windowEnd.difference(now).inSeconds;
+
+    _remainingSeconds = secsleft > 0 ? secsleft : 0;
+    _totalSeconds = _remainingSeconds > 0 ? _remainingSeconds : 1;
   }
 
   //Inicializa (o continua) el timer
@@ -100,7 +113,7 @@ class _LockInScreenState extends State<LockInScreen> {
               //Titulo de la sesion
               const SizedBox(height: 20),
               Text(
-                'Titulo de ejemplo',
+                widget.task.title,
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
               ),
 
@@ -191,20 +204,20 @@ class _LockInScreenState extends State<LockInScreen> {
     
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         content: const Text('There is still time left. Finish your Task'),
         actions: [
 
           //Boton para seguri la task
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Resume the Task')
           ),
 
           //Boton para salir definitivamente de la task
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pop(dialogContext);
               _goToSummary();
             }, 
             child: const Text('Take the easy way out'),
@@ -220,7 +233,7 @@ class _LockInScreenState extends State<LockInScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SummaryScreen(
-        taskTitle: 'Titulo ejemplo', 
+        taskTitle: widget.task.title, 
         plannedSeconds: _totalSeconds,
         actualSeconds: _totalSeconds - _remainingSeconds,
         completedFully: _remainingSeconds == 0

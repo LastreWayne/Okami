@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:okami/models/task_model.dart';
 import 'lock_in_screen.dart';
 
 class LockingInScreen extends StatelessWidget {
-  const LockingInScreen({super.key});
+  final Task task;
+  const LockingInScreen({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
+    final bool isLate = DateTime.now().isAfter(task.dateTime); //Boleano para asegurarse si en el momento la task se empezaria tarde
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Locking In'),
@@ -16,7 +20,29 @@ class LockingInScreen extends StatelessWidget {
         child: Column(
           children: [
             const Spacer(),
+            
+            //Badge para el isLate
+            if (isLate) Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.error,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.warning_amber_rounded, size: 18),
+                  SizedBox(width: 6),
+                  Text(
+                    'LATE!',
+                    style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.5),
+                  ),
+                ],
+              ),
+            ),
 
+            //Info de la task
             Text(
               'Entering the following Task: ',
               style: Theme.of(context).textTheme.bodyMedium,
@@ -33,24 +59,26 @@ class LockingInScreen extends StatelessWidget {
 
                     //Titulo de la task y descripcion
                     Text(
-                      'Titulo por ahora ejemplo',//Ejemplo
+                      task.title,
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 24),
                     ),
 
-                    const SizedBox(height: 8),
-                    Text(
-                      'Descripcion ejemplo',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    if (task.description.isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        task.description,
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
 
                     //Datos rapidos (duracion/prioridad)
                     const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildInfoChip(context, Icons.timer_outlined, '30min'),
-                        _buildInfoChip(context, Icons.flag_outlined, '[A] Priority (High)'), //txto dejemplo 
+                        _buildInfoChip(context, Icons.timer_outlined, '${task.durationMinutes} min'),
+                        _buildInfoChip(context, Icons.flag_outlined, '${task.priority} Priority'),
                       ],
                     ),
                   ],
@@ -68,8 +96,8 @@ class LockingInScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LockInScreen(), 
-                    )
+                      builder: (context) => LockInScreen(task: task), 
+                    ),
                   );
                 },
                 icon: const Icon(Icons.lock_outline),
