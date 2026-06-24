@@ -79,6 +79,91 @@ class AppTheme {
         onSurface: AppColors.ink,
         error: Color(0xFFC0564B),
       ),
+      cardTheme: CardThemeData(
+        color: AppColors.surface,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: AppColors.hairline),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.sumi,
+        foregroundColor: AppColors.ink,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        titleTextStyle: GoogleFonts.shipporiMincho(
+          fontSize: 22,
+          fontWeight: FontWeight.w500,
+          color: AppColors.ink,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.surface,
+        hintStyle: const TextStyle(color: AppColors.inkFaint),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.hairline),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.hairline),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.ultramarineBright, width: 1.5),
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith((s) =>
+              s.contains(WidgetState.selected) ? AppColors.ultramarine : Colors.transparent),
+          foregroundColor: WidgetStateProperty.resolveWith((s) =>
+              s.contains(WidgetState.selected) ? AppColors.ink : AppColors.inkMuted),
+          side: const WidgetStatePropertyAll(BorderSide(color: AppColors.hairline)),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: AppColors.surface,
+        selectedColor: AppColors.ultramarine,
+        side: const BorderSide(color: AppColors.hairline),
+        labelStyle: GoogleFonts.inter(fontSize: 13, color: AppColors.ink),
+        secondaryLabelStyle: GoogleFonts.inter(fontSize: 13, color: AppColors.ink),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        showCheckmark: false,
+      ),
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((s) =>
+            s.contains(WidgetState.selected) ? AppColors.ink : AppColors.inkMuted),
+        trackColor: WidgetStateProperty.resolveWith((s) =>
+            s.contains(WidgetState.selected) ? AppColors.ultramarine : AppColors.surface),
+        trackOutlineColor: const WidgetStatePropertyAll(AppColors.hairline),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.sumi,
+        elevation: 0,
+        indicatorColor: AppColors.ultramarine.withValues(alpha: 0.18),
+        iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
+              color: s.contains(WidgetState.selected) ? AppColors.ink : AppColors.inkFaint,
+            )),
+        labelTextStyle: WidgetStatePropertyAll(
+          GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.inkMuted),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.ultramarine,
+          foregroundColor: AppColors.ink,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
     );
   }
 }

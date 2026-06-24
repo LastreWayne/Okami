@@ -30,4 +30,14 @@ void main() {
     final ctx = tester.element(find.byType(Scaffold));
     expect(Theme.of(ctx).scaffoldBackgroundColor, AppColors.sumi);
   });
+
+  test('card theme is flat with hairline border', () {
+    final card = AppTheme.darkTheme.cardTheme;
+    expect(card.color, AppColors.surface);
+    expect(card.elevation, 0);
+  });
+
+  test('navigation bar theme uses sumi background', () {
+    expect(AppTheme.darkTheme.navigationBarTheme.backgroundColor, AppColors.sumi);
+  });
 }
