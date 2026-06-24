@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:okami/models/task_model.dart';
 import 'package:okami/providers/task_provider.dart';
 import '../../widgets/task_form_widgets.dart';
+import '../../widgets/app_widgets.dart';
 
 class NewTaskScreen extends StatefulWidget {
   const NewTaskScreen({super.key});
@@ -87,10 +88,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             const FieldLabel('Title'),
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(
-                hintText: 'The TASK',
-                border: OutlineInputBorder()
-              ),
+              decoration: const InputDecoration(hintText: 'The TASK'),
             ),
 
             //Descripcion
@@ -100,10 +98,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             TextField(
               controller: _descriptionController,
               maxLines: 1,
-              decoration: const InputDecoration(
-                hintText: 'What is it about?',
-                border: OutlineInputBorder(), 
-              ),
+              decoration: const InputDecoration(hintText: 'What is it about?'),
             ),
 
             //Fecha/hora y tiempo
@@ -160,10 +155,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       TextField(
                         controller: _durationController,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          hintText: 'How much?',
-                          border: OutlineInputBorder(),
-                        ),
+                        decoration: const InputDecoration(hintText: 'How much?'),
                       ),
 
                     ],
@@ -201,13 +193,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
-                onPressed: _saveTask,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  child: Text('Create Task'),
-                ),
-              ),
+              child: GradientButton(label: 'Create Task', onPressed: _saveTask),
             )
           ]
         ),
