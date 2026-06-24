@@ -11,7 +11,7 @@ class FieldLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.labelLarge,
       ),
     );
   }
