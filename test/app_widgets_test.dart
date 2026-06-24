@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:okami/models/task_model.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/widgets/app_widgets.dart';
 
@@ -49,5 +50,21 @@ void main() {
     ));
     await tester.tap(find.text('Create Task'));
     expect(pressed, isTrue);
+  });
+
+  testWidgets('TaskRow shows title and formatted meta', (tester) async {
+    final task = Task(
+      id: '1',
+      title: 'Deep work',
+      description: '',
+      dateTime: DateTime(2026, 6, 24, 8, 5),
+      durationMinutes: 90,
+      priority: TaskPriority.a,
+      category: TaskCategory.neuroplasticity,
+      repeatsWeekly: false,
+    );
+    await tester.pumpWidget(_host(TaskRow(task: task, onTap: () {})));
+    expect(find.text('Deep work'), findsOneWidget);
+    expect(find.text('08:05 · 90 min · Neuroplasticity'), findsOneWidget);
   });
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:okami/models/task_model.dart';
 import 'package:okami/theme/app_theme.dart';
 
 /// A short, tapered ink brush stroke filled with the accent gradient.
@@ -171,6 +172,77 @@ class GradientButton extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A single task as a tappable ink card with a gradient priority bar.
+class TaskRow extends StatelessWidget {
+  final Task task;
+  final VoidCallback onTap;
+  const TaskRow({super.key, required this.task, required this.onTap});
+
+  Color get _priorityColor {
+    switch (task.priority) {
+      case TaskPriority.a:
+        return AppColors.priorityA;
+      case TaskPriority.b:
+        return AppColors.priorityB;
+      case TaskPriority.c:
+        return AppColors.priorityC;
+    }
+  }
+
+  String get _categoryLabel {
+    switch (task.category) {
+      case TaskCategory.body:
+        return 'Body';
+      case TaskCategory.neuroplasticity:
+        return 'Neuroplasticity';
+      case TaskCategory.motion:
+        return 'Motion';
+    }
+  }
+
+  String get _meta {
+    final h = task.dateTime.hour.toString().padLeft(2, '0');
+    final m = task.dateTime.minute.toString().padLeft(2, '0');
+    return '$h:$m · ${task.durationMinutes} min · $_categoryLabel';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkCard(
+        onTap: onTap,
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            Container(
+              width: 4,
+              height: 42,
+              decoration: BoxDecoration(
+                color: _priorityColor,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(task.title, style: t.titleMedium),
+                  const SizedBox(height: 4),
+                  Text(_meta, style: t.labelMedium),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: AppColors.inkFaint, size: 20),
+          ],
         ),
       ),
     );
