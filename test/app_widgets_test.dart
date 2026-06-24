@@ -23,4 +23,31 @@ void main() {
     await tester.pumpWidget(_host(const KanjiWatermark()));
     expect(find.text('狼'), findsOneWidget);
   });
+
+  testWidgets('InkCard renders its child and reacts to tap', (tester) async {
+    var tapped = false;
+    await tester.pumpWidget(_host(
+      InkCard(onTap: () => tapped = true, child: const Text('hi')),
+    ));
+    expect(find.text('hi'), findsOneWidget);
+    await tester.tap(find.text('hi'));
+    expect(tapped, isTrue);
+  });
+
+  testWidgets('ActionTile shows icon + label', (tester) async {
+    await tester.pumpWidget(_host(
+      ActionTile(icon: Icons.lock_outline, label: 'Lock in', onTap: () {}),
+    ));
+    expect(find.text('Lock in'), findsOneWidget);
+    expect(find.byIcon(Icons.lock_outline), findsOneWidget);
+  });
+
+  testWidgets('GradientButton fires onPressed', (tester) async {
+    var pressed = false;
+    await tester.pumpWidget(_host(
+      GradientButton(label: 'Create Task', onPressed: () => pressed = true),
+    ));
+    await tester.tap(find.text('Create Task'));
+    expect(pressed, isTrue);
+  });
 }
