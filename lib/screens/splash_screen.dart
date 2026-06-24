@@ -71,29 +71,31 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.sumi,
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          const KanjiWatermark(size: 300),
-          FadeTransition(
-            // FadeTransition usa el valor de _fadeAnimation (0.0 a 1.0)
-            // para controlar la opacidad de su hijo
-            opacity: _fadeAnimation,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/app_logo.png',
-                  width: 180,
-                ),
-                const SizedBox(height: 28),
-                Text('ŌKAMI', style: Theme.of(context).textTheme.displayLarge),
-                const SizedBox(height: 16),
-                const BrushStroke(width: 88, height: 8),
-              ],
-            ),
+      body: Center(
+        // FadeTransition usa el valor de _fadeAnimation (0.0 a 1.0)
+        // para controlar la opacidad de su hijo
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/app_logo.png',
+                width: 160,
+              ),
+              const SizedBox(height: 28),
+              // left pad compensa el espacio final que letterSpacing añade,
+              // para que el wordmark quede ópticamente centrado
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Text('ŌKAMI', style: Theme.of(context).textTheme.displayLarge),
+              ),
+              const SizedBox(height: 16),
+              const BrushStroke(width: 88, height: 8),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

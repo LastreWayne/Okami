@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Base — warm sumi
-  static const Color sumi = Color(0xFF16140F);
-  static const Color surface = Color(0xFF1F1C16);
-  static const Color hairline = Color(0xFF2E2A22);
-  // Ink
-  static const Color ink = Color(0xFFF2ECE0);
-  static const Color inkMuted = Color(0xFF9A9286);
-  static const Color inkFaint = Color(0xFF6B6459);
+  // Base — neutral-cool sumi (no warm/yellow cast)
+  static const Color sumi = Color(0xFF0E0F13);
+  static const Color surface = Color(0xFF17191F);
+  static const Color hairline = Color(0xFF282C34);
+  // Ink — neutral-cool whites/greys
+  static const Color ink = Color(0xFFECEEF2);
+  static const Color inkMuted = Color(0xFF9DA1A9);
+  static const Color inkFaint = Color(0xFF686C74);
   // Accent — ultramarine gradient family
   static const Color ultramarineDeep = Color(0xFF1E2A7A);
   static const Color ultramarine = Color(0xFF3A4ED6);
