@@ -3,6 +3,7 @@ import 'package:okami/screens/neuroplasticity/edit_task_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:okami/models/task_model.dart';
 import 'package:okami/providers/task_provider.dart';
+import 'package:okami/widgets/app_widgets.dart';
 import 'week_org_screen.dart';
 import 'locking_in_screen.dart';
 
@@ -12,9 +13,8 @@ class NeuPlaScreen extends StatelessWidget {
   //Contiene los elementos de la Screen
   @override
   Widget build(BuildContext context) {
-    //Leer tasks del dia 
+    //Leer tasks del dia
     final todayTasks = context.watch<TaskProvider>().tasksByDay(DateTime.now());
-
 
     return Scaffold(
 
@@ -28,26 +28,14 @@ class NeuPlaScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //TITULO
-              Text(
-                'Task Manager',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Today',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              const SectionTitle(title: 'Task Manager', subtitle: 'Today'),
 
               const SizedBox(height: 20),
               //Botones (LockIN/Org)
               Row(
                 children: [
                   Expanded(
-                    child: _buildActionButton(
-                      context,
+                    child: ActionTile(
                       icon: Icons.lock_outline,
                       label: 'Lock in',
                       onTap: () {
@@ -59,19 +47,19 @@ class NeuPlaScreen extends StatelessWidget {
                           );
                         } else {
                           Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => LockingInScreen(task: task)),
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LockingInScreen(task: task),
+                            ),
                           );
                         }
                       },
                     ),
                   ),
 
-
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _buildActionButton(
-                      context,
+                    child: ActionTile(
                       icon: Icons.edit_attributes_outlined,
                       label: 'Organize my week',
                       onTap: () {
@@ -81,7 +69,7 @@ class NeuPlaScreen extends StatelessWidget {
                             builder: (context) => const WeekOrgScreen(),
                           ),
                         );
-                      }
+                      },
                     ),
                   ),
                 ],
@@ -91,8 +79,10 @@ class NeuPlaScreen extends StatelessWidget {
 
               //Lista de Tasks
               Expanded(
-                child: todayTasks.isEmpty ? _buildEmptyState(context) : _buildTaskList(context, todayTasks),
-              ),   
+                child: todayTasks.isEmpty
+                    ? _buildEmptyState(context)
+                    : _buildTaskList(context, todayTasks),
+              ),
             ],
           ),
         ),
@@ -101,73 +91,21 @@ class NeuPlaScreen extends StatelessWidget {
   }
 
   //Logica funcional de la screen
- Widget _buildTaskList(BuildContext context, List<Task> tasks) {
-  return ListView.builder(
-    itemCount: tasks.length,
-    itemBuilder: (context, idx) {
-      final task = tasks[idx];
-      return Card(
-        child: ListTile(
-          leading: CircleAvatar(
-            child: Text(task.priority.name.toUpperCase()),
-          ),
-          title: Text(task.title),
-          subtitle: Text(
-            '${_formatHour(task.dateTime)} · ${task.durationMinutes} min',
-          ),
+  Widget _buildTaskList(BuildContext context, List<Task> tasks) {
+    return ListView.builder(
+      itemCount: tasks.length,
+      itemBuilder: (context, idx) {
+        final task = tasks[idx];
+        return TaskRow(
+          task: task,
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => EditTaskScreen(task: task))
+              MaterialPageRoute(builder: (context) => EditTaskScreen(task: task)),
             );
           },
-        ),
-      );
-    },
-  );
- }
-
- String _formatHour(DateTime dt) {
-  final h = dt.hour.toString().padLeft(2, '0');
-  final m = dt.minute.toString().padLeft(2, '0');
-  return '$h:$m';
- }
-
-
-
-
-
-
-  //Construir un boton de accion
-  Widget _buildActionButton(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return Material(
-      //Caracteristicas del boton
-      color: Theme.of(context).colorScheme.surface,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        //Efecto visual al interactuar con el boton
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-          child: Column(
-            children: [
-              Icon(icon, size: 26),
-              const SizedBox(height: 8),
-              Text(
-                label,
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 13),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -177,21 +115,14 @@ class NeuPlaScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.check_circle_outline,
-            size: 56,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
-          ),
-          const SizedBox(height: 16),
+          const KanjiWatermark(size: 120),
+          const SizedBox(height: 8),
           Text(
             'No tasks yet',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 20),
           ),
         ],
       ),
     );
   }
-
 }
