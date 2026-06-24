@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:okami/theme/app_theme.dart';
+import 'package:okami/widgets/app_widgets.dart';
 import 'main_screen.dart';
 
 //Se crea un widget stateful que puede cambiar con el tiempo esto por que lo queremos animar
@@ -68,31 +70,30 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor aquí sobreescribe el del tema para esta pantalla
-      backgroundColor: const Color(0xFF0D0D0D),
-      body: Center(
-        child: FadeTransition(
-          // FadeTransition usa el valor de _fadeAnimation (0.0 a 1.0)
-          // para controlar la opacidad de su hijo
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/app_logo.png',
-                width: 200,
-              ),
-              const SizedBox(height: 32),
-              Text(
-                'ŌKAMI',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      letterSpacing: 8,
-                      fontWeight: FontWeight.w300,
-                    ),
-              ),
-            ],
+      backgroundColor: AppColors.sumi,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          const KanjiWatermark(size: 300),
+          FadeTransition(
+            // FadeTransition usa el valor de _fadeAnimation (0.0 a 1.0)
+            // para controlar la opacidad de su hijo
+            opacity: _fadeAnimation,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/app_logo.png',
+                  width: 180,
+                ),
+                const SizedBox(height: 28),
+                Text('ŌKAMI', style: Theme.of(context).textTheme.displayLarge),
+                const SizedBox(height: 16),
+                const BrushStroke(width: 88, height: 8),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
