@@ -43,7 +43,7 @@ class NeuPlaScreen extends StatelessWidget {
 
                         if (task == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('No Task planned currently')),
+                            const SnackBar(content: Text('No Task currently')),
                           );
                         } else {
                           Navigator.push(

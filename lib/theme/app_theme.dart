@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Base — neutral-cool sumi (no warm/yellow cast)
-  static const Color sumi = Color(0xFF0E0F13);
+  // Base — neutral-cool sumi
+  static const Color sumi = Color.fromARGB(255, 9, 9, 13);
   static const Color surface = Color(0xFF17191F);
   static const Color hairline = Color(0xFF282C34);
   // Ink — neutral-cool whites/greys

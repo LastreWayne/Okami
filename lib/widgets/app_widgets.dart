@@ -71,7 +71,7 @@ class KanjiWatermark extends StatelessWidget {
         fontFamily: AppFonts.mincho,
         fontSize: size,
         fontWeight: FontWeight.w500,
-        color: AppColors.ink.withValues(alpha: 0.05),
+        color: const Color.fromARGB(255, 18, 31, 214).withValues(alpha: 0.05),
       ),
     );
   }
