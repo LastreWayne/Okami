@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   // Base — warm sumi
@@ -28,37 +27,48 @@ class AppGradients {
   );
 }
 
+/// Bundled font families (declared in pubspec, loaded from assets/fonts).
+class AppFonts {
+  static const String mincho = 'Shippori Mincho';
+  static const String inter = 'Inter';
+}
+
 class AppTheme {
   static ThemeData get darkTheme {
-    final base = ThemeData(brightness: Brightness.dark);
-    final textTheme = GoogleFonts.interTextTheme(base.textTheme).copyWith(
-      displayLarge: GoogleFonts.shipporiMincho(
+    const textTheme = TextTheme(
+      displayLarge: TextStyle(
+        fontFamily: AppFonts.mincho,
         fontSize: 32,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w400,
         letterSpacing: 8,
         color: AppColors.ink,
       ),
-      headlineLarge: GoogleFonts.shipporiMincho(
+      headlineLarge: TextStyle(
+        fontFamily: AppFonts.mincho,
         fontSize: 28,
         fontWeight: FontWeight.w500,
         color: AppColors.ink,
       ),
-      titleMedium: GoogleFonts.inter(
+      titleMedium: TextStyle(
+        fontFamily: AppFonts.inter,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: AppColors.ink,
       ),
-      bodyMedium: GoogleFonts.inter(
+      bodyMedium: TextStyle(
+        fontFamily: AppFonts.inter,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: AppColors.inkMuted,
       ),
-      labelMedium: GoogleFonts.inter(
+      labelMedium: TextStyle(
+        fontFamily: AppFonts.inter,
         fontSize: 12.5,
         fontWeight: FontWeight.w500,
         color: AppColors.inkFaint,
       ),
-      labelLarge: GoogleFonts.inter(
+      labelLarge: TextStyle(
+        fontFamily: AppFonts.inter,
         fontSize: 13,
         fontWeight: FontWeight.w600,
         color: AppColors.ink,
@@ -68,6 +78,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      fontFamily: AppFonts.inter,
       scaffoldBackgroundColor: AppColors.sumi,
       canvasColor: AppColors.sumi,
       textTheme: textTheme,
@@ -88,13 +99,14 @@ class AppTheme {
           side: const BorderSide(color: AppColors.hairline),
         ),
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.sumi,
         foregroundColor: AppColors.ink,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.shipporiMincho(
+        titleTextStyle: TextStyle(
+          fontFamily: AppFonts.mincho,
           fontSize: 22,
           fontWeight: FontWeight.w500,
           color: AppColors.ink,
@@ -134,8 +146,8 @@ class AppTheme {
         backgroundColor: AppColors.surface,
         selectedColor: AppColors.ultramarine,
         side: const BorderSide(color: AppColors.hairline),
-        labelStyle: GoogleFonts.inter(fontSize: 13, color: AppColors.ink),
-        secondaryLabelStyle: GoogleFonts.inter(fontSize: 13, color: AppColors.ink),
+        labelStyle: const TextStyle(fontFamily: AppFonts.inter, fontSize: 13, color: AppColors.ink),
+        secondaryLabelStyle: const TextStyle(fontFamily: AppFonts.inter, fontSize: 13, color: AppColors.ink),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         showCheckmark: false,
       ),
@@ -153,8 +165,8 @@ class AppTheme {
         iconTheme: WidgetStateProperty.resolveWith((s) => IconThemeData(
               color: s.contains(WidgetState.selected) ? AppColors.ink : AppColors.inkFaint,
             )),
-        labelTextStyle: WidgetStatePropertyAll(
-          GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.inkMuted),
+        labelTextStyle: const WidgetStatePropertyAll(
+          TextStyle(fontFamily: AppFonts.inter, fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.inkMuted),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(

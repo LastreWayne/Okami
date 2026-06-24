@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:okami/theme/app_theme.dart';
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   test('palette tokens match the spec', () {
     expect(AppColors.sumi, const Color(0xFF16140F));
     expect(AppColors.surface, const Color(0xFF1F1C16));

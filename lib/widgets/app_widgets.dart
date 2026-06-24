@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:okami/models/task_model.dart';
 import 'package:okami/theme/app_theme.dart';
 
@@ -68,7 +67,8 @@ class KanjiWatermark extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '狼',
-      style: GoogleFonts.shipporiMincho(
+      style: TextStyle(
+        fontFamily: AppFonts.mincho,
         fontSize: size,
         fontWeight: FontWeight.w500,
         color: AppColors.ink.withValues(alpha: 0.05),
@@ -165,7 +165,8 @@ class GradientButton extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(
               label,
-              style: GoogleFonts.inter(
+              style: const TextStyle(
+                fontFamily: AppFonts.inter,
                 fontSize: 15,
                 fontWeight: FontWeight.w600,
                 color: AppColors.ink,

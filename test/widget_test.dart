@@ -1,13 +1,10 @@
 // Smoke test: the app boots to the splash screen wordmark.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:okami/main.dart';
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   testWidgets('OkamiApp boots to the splash wordmark', (WidgetTester tester) async {
     await tester.pumpWidget(const OkamiApp());
 

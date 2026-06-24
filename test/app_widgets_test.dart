@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:okami/models/task_model.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/widgets/app_widgets.dart';
@@ -9,8 +8,6 @@ Widget _host(Widget child) =>
     MaterialApp(theme: AppTheme.darkTheme, home: Scaffold(body: child));
 
 void main() {
-  setUpAll(() => GoogleFonts.config.allowRuntimeFetching = false);
-
   testWidgets('SectionTitle shows title, subtitle and a brush stroke', (tester) async {
     await tester.pumpWidget(_host(
       const SectionTitle(title: 'Task Manager', subtitle: 'Today'),
