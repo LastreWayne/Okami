@@ -4,7 +4,7 @@ import 'package:okami/theme/app_theme.dart';
 
 void main() {
   test('palette tokens match the spec', () {
-    expect(AppColors.sumi, const Color(0xFF0E0F13));
+    expect(AppColors.sumi, const Color(0xFF09090D));
     expect(AppColors.surface, const Color(0xFF17191F));
     expect(AppColors.hairline, const Color(0xFF282C34));
     expect(AppColors.ink, const Color(0xFFECEEF2));
