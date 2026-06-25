@@ -94,4 +94,23 @@ class TaskProvider extends ChangeNotifier {
     }
     return null;
   }
+
+  //Reconoce si hay algun task en conflicto de hora con otra
+  Task? findConflict(Task candidate, {String? ignoreId}) {
+    final candidateStart = candidate.dateTime;
+    final candidateEnd = candidate.dateTime.add(Duration(minutes: candidate.durationMinutes));
+
+    for (final task in _tasks) {//Revisa las tasks existentes y confirma si hay conflictos
+      if (task.id == ignoreId) continue; //Evita que la task se choque con ella misma
+
+      final start = task.dateTime;
+      final end = task.dateTime.add(Duration(minutes: task.durationMinutes));
+
+      //Dos tasks se interrumpen si newStart < end y start < newEnd
+      final overlaps = candidateStart.isBefore(end) && start.isBefore(candidateEnd);
+      if (overlaps) return task;
+    }
+    return null;
+  }
+
 }

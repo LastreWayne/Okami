@@ -10,11 +10,20 @@ import 'locking_in_screen.dart';
 class NeuPlaScreen extends StatelessWidget {
   const NeuPlaScreen({super.key});
 
+  //Nombres para armar la fecha
+  static const List _weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  static const List _months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
   //Contiene los elementos de la Screen
   @override
   Widget build(BuildContext context) {
     //Leer tasks del dia
-    final todayTasks = context.watch<TaskProvider>().tasksByDay(DateTime.now());
+    final now = DateTime.now();
+    final todayTasks = context.watch<TaskProvider>().tasksByDay(now);
+    
+    //Subtitulo para la fecha
+    final todayLabel = 'Today · ${_weekDays[now.weekday - 1]}, ${_months[now.month - 1]} ${now.day}';
 
     return Scaffold(
 
@@ -28,7 +37,7 @@ class NeuPlaScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //TITULO
-              const SectionTitle(title: 'Task Manager', subtitle: 'Today'),
+              SectionTitle(title: 'Task Manager', subtitle: todayLabel),
 
               const SizedBox(height: 20),
               //Botones (LockIN/Org)

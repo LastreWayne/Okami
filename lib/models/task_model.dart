@@ -71,3 +71,10 @@ class Task {
     repeatsWeekly: json['repeatsWeekly'] as bool,
   );
 }
+
+
+
+//Tweak para la visualizacion en pantalla de la prioridad
+extension TaskPriorityLabel on TaskPriority {
+  String get label => name.toUpperCase();
+}

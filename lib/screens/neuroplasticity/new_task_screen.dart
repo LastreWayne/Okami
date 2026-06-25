@@ -61,6 +61,29 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       repeatsWeekly: _repeatsWeekly,
     );
 
+
+    //Centinelas para reglas sobre las Tasks
+
+    final provider = context.read<TaskProvider>();
+    if (newTask.dateTime.isBefore(DateTime.now())) {//Revisar que no se cree la task en el pasado
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Not possible to schedule a Task in the past!')
+        ),
+      );
+      return;
+    }
+
+    final conflict = provider.findConflict(newTask);
+    if (conflict != null) { //Revisar que no exista conflicto entre Tasks ya creadas
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Task time conflicts with ${conflict.title}')
+        ),
+      );
+      return;
+    }
+
     //Agregar la Task al app state (lista central)
     context.read<TaskProvider>().addTask(newTask);
 

@@ -4,6 +4,7 @@ import 'package:okami/models/task_model.dart';
 import 'package:okami/providers/task_provider.dart';
 import 'new_task_screen.dart';
 import 'edit_task_screen.dart';
+import 'package:okami/theme/app_theme.dart';
 
 class WeekOrgScreen extends StatelessWidget {
   const WeekOrgScreen ({super.key});
@@ -25,10 +26,12 @@ class WeekOrgScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weekDays = _weekDays();
+    final todayIdx = DateTime.now().weekday - 1;
 
     //Tabs por dia de la semana
     return DefaultTabController(
       length: 7,
+      initialIndex: todayIdx,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Organize my week'),
@@ -112,14 +115,14 @@ class _TaskCard extends StatelessWidget {
   const _TaskCard({required this.task});
 
   //Color del badge segun la prioridad
-  Color _priorityColor(BuildContext context) {
+  Color get _priorityColor {
     switch (task.priority) {
       case TaskPriority.a:
-        return Theme.of(context).colorScheme.error;
+        return AppColors.priorityA;
       case TaskPriority.b:
-        return Theme.of(context).colorScheme.secondary;
+        return AppColors.priorityB;
       case TaskPriority.c:
-        return Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
+        return AppColors.priorityC;
     }
   }
 
@@ -151,7 +154,7 @@ class _TaskCard extends StatelessWidget {
 
         //Badge de prioridad (A/B/C)
         leading: CircleAvatar(
-          backgroundColor: _priorityColor(context),
+          backgroundColor: _priorityColor,
           child: Text(
             task.priority.name.toUpperCase(),
             style: const TextStyle(

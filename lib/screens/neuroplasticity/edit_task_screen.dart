@@ -25,6 +25,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   late TaskCategory _category;
   late bool _repeatsWeekly;
   late DateTime _selectedDate;
+  late TimeOfDay _selectedTime;
 
   //Pre-cargar los valores de la task existente
   @override
@@ -39,6 +40,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     _category = task.category;
     _repeatsWeekly = task.repeatsWeekly;
     _selectedDate = task.dateTime;
+    _selectedTime = TimeOfDay.fromDateTime(task.dateTime);
   }
 
   //Deshacerce de los controles cuando se sale de la pagina
@@ -63,12 +65,31 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     final updatedTask = widget.task.copyWith(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
-      dateTime: _selectedDate,
+      dateTime: DateTime(
+        _selectedDate.year,
+        _selectedDate.month,
+        _selectedDate.day,
+        _selectedTime.hour,
+        _selectedTime.minute,
+      ),
       durationMinutes: int.tryParse(_durationController.text) ?? 30,
       priority: _priority,
       category: _category,
       repeatsWeekly: _repeatsWeekly,
     );
+
+    //Centinelas para las reglas de tasks
+    final provider = context.read<TaskProvider>();
+    
+    final conflict = provider.findConflict(updatedTask, ignoreId: widget.task.id);
+    if (conflict != null) { //Revisar que no exista conflicto entre Tasks ya creadas
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Task time conflicts with ${conflict.title}')
+        ),
+      );
+      return;
+    }
 
     //Actualizar la Task en el app state (lista central)
     context.read<TaskProvider>().updateTask(updatedTask);
@@ -110,7 +131,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             const FieldLabel('Description'),
             TextField(
               controller: _descriptionController,
-              maxLines: 2,
+              maxLines: 1,
               decoration: const InputDecoration(hintText: 'What is it about?'),
             ),
 
@@ -123,13 +144,34 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Date'),
-                      OutlinedButton.icon(
-                        onPressed: _pickDate,
-                        icon: const Icon(Icons.calendar_today, size: 18),
-                        label: Text(
-                          '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-                        )
+                      const FieldLabel('Date / Time'),
+                      Row(
+                        children: [
+
+                          //Fecha
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _pickDate,
+                              icon: const Icon(Icons.calendar_today, size: 18),
+                              label: Text(
+                                '${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 12),
+
+                          //Hora
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: _pickTime,
+                              icon: const Icon(Icons.access_time, size: 18),
+                              label: Text(
+                                _selectedTime.format(context),
+                              ),
+                            ),
+                          ),
+                        ],
                       )
 
                     ],
@@ -147,7 +189,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         controller: _durationController,
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(hintText: 'How much?'),
-                      ),
+                      ),  
 
                     ],
                   ),
@@ -229,6 +271,18 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
     if (picked != null) {
       setState(() => _selectedDate = picked);
+    }
+  }
+
+  //Selector de hora nativo de flutter
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+
+    if (picked != null) {
+      setState(() => _selectedTime = picked);
     }
   }
 
