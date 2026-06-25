@@ -60,7 +60,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     }
 
     //copywith conserva el id original y reemplaza lo editado
-    final updatedTask = widget.task.copywith(
+    final updatedTask = widget.task.copyWith(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
       dateTime: _selectedDate,

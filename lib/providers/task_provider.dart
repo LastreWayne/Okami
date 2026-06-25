@@ -1,17 +1,54 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/task_model.dart';
 
 class TaskProvider extends ChangeNotifier {
   //Lista central debe ser privada
   //Aqui se van a almacenar la informacion de las tasks
   final List<Task> _tasks = [];
+  static const _storageKey = 'tasks'; //Llave que representa la lista de tasks en JSON
+
+  //Cargar los datos con el provider
+  TaskProvider() {
+    _load();
+  }
 
   //getter publico para solo lectura.
   List <Task> get tasks => List.unmodifiable(_tasks);
 
+
+//PERSISTENCIA DE LAS TASKS
+
+  // GUARDAR TASK: Convierte a JSON y lo escribe en el disco
+  Future<void> _save() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = jsonEncode(
+      _tasks.map((task) => task.toJson()).toList(), //Pasamos la lista de tasks al mapa de json a string
+    );
+    await prefs.setString(_storageKey, jsonString);
+  }
+
+  // CARGAR TASK: lee el disco y reconstruye las taks para su uso dentro del app
+  Future<void> _load() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(_storageKey);
+    if (jsonString == null) return;
+
+    final List<dynamic> decoded = jsonDecode(jsonString);
+    _tasks
+      ..clear()
+      ..addAll(decoded.map((item) => Task.fromJson(item as Map<String, dynamic>)));
+    notifyListeners();//Le dice al sistema que se actualizaron los datos
+  }
+
+
+//MANIPULACION DE TASKS
+
   //Agregar una task
   void addTask(Task task) {
     _tasks.add(task);
+    _save(); //Guarda el cambio para la persistencia
     notifyListeners();
   }
 
@@ -21,6 +58,7 @@ class TaskProvider extends ChangeNotifier {
 
     if (idx != -1) {//si la encuentra la modifica
       _tasks[idx] = updatedTask;
+      _save();
       notifyListeners();
     }
   }
@@ -28,6 +66,7 @@ class TaskProvider extends ChangeNotifier {
   //Eliminar una task
   void deleteTask(String id) {
     _tasks.removeWhere((t) => t.id == id);
+    _save();
     notifyListeners();
   }
 
