@@ -77,7 +77,7 @@ class LockingInScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildInfoChip(context, Icons.timer_outlined, '${task.durationMinutes} min'),
+                        _buildInfoChip(context, Icons.timer_outlined, task.durationMinutes.asDuration),
                         _buildInfoChip(context, Icons.flag_outlined, '[${task.priority.label}] Priority'),
                       ],
                     ),

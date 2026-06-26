@@ -16,9 +16,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   //Controlers, variables para saber lo que digo en los textfields
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  final _durationController = TextEditingController();
 
   //Variables para las elecciones de los demas parametros de una Task
+  int _durationMinutes = 30;
   TaskPriority _priority = TaskPriority.b;
   TaskCategory _category = TaskCategory.neuroplasticity;
   bool _repeatsWeekly = false;
@@ -30,7 +30,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
-    _durationController.dispose();
     super.dispose();
   }
   
@@ -55,7 +54,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         _selectedTime.hour,
         _selectedTime.minute
       ),
-      durationMinutes: int.tryParse(_durationController.text) ?? 30,
+      durationMinutes: _durationMinutes,
       priority: _priority,
       category: _category,
       repeatsWeekly: _repeatsWeekly,
@@ -175,12 +174,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     children: [
 
                       const FieldLabel('Duration'),
-                      TextField(
-                        controller: _durationController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(hintText: 'How much?'),
+                      DurationSelector(
+                        value: _durationMinutes,
+                        onChanged: (m) => setState(() => _durationMinutes = m)
                       ),
-
                     ],
                   ),
                 )

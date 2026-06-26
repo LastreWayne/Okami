@@ -71,7 +71,7 @@ class KanjiWatermark extends StatelessWidget {
         fontFamily: AppFonts.mincho,
         fontSize: size,
         fontWeight: FontWeight.w500,
-        color: const Color.fromARGB(255, 18, 31, 214).withValues(alpha: 0.05),
+        color: const Color.fromARGB(255, 150, 155, 226).withValues(alpha: 0.5),
       ),
     );
   }
@@ -210,7 +210,7 @@ class TaskRow extends StatelessWidget {
   String get _meta {
     final h = task.dateTime.hour.toString().padLeft(2, '0');
     final m = task.dateTime.minute.toString().padLeft(2, '0');
-    return '$h:$m · ${task.durationMinutes} min · $_categoryLabel';
+    return '$h:$m  ·  ${task.durationMinutes.asDuration}  ·  $_categoryLabel';
   }
 
   @override

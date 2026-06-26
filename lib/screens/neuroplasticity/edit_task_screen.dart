@@ -18,9 +18,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   //Controlers, variables para saber lo que digo en los textfields
   late final TextEditingController _titleController;
   late final TextEditingController _descriptionController;
-  late final TextEditingController _durationController;
 
   //Variables para las elecciones de los demas parametros de una Task
+  late int _durationMinutes;
   late TaskPriority _priority;
   late TaskCategory _category;
   late bool _repeatsWeekly;
@@ -34,8 +34,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     final task = widget.task;
     _titleController = TextEditingController(text: task.title);
     _descriptionController = TextEditingController(text: task.description);
-    _durationController =
-        TextEditingController(text: task.durationMinutes.toString());
+    _durationMinutes = task.durationMinutes;
     _priority = task.priority;
     _category = task.category;
     _repeatsWeekly = task.repeatsWeekly;
@@ -48,7 +47,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
-    _durationController.dispose();
     super.dispose();
   }
 
@@ -72,7 +70,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         _selectedTime.hour,
         _selectedTime.minute,
       ),
-      durationMinutes: int.tryParse(_durationController.text) ?? 30,
+      durationMinutes: _durationMinutes,
       priority: _priority,
       category: _category,
       repeatsWeekly: _repeatsWeekly,
@@ -185,11 +183,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     children: [
 
                       const FieldLabel('Duration'),
-                      TextField(
-                        controller: _durationController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(hintText: 'How much?'),
-                      ),  
+                      DurationSelector(
+                        value: _durationMinutes,
+                        onChanged: (m) => setState(() => _durationMinutes = m)
+                      )
 
                     ],
                   ),

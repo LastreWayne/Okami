@@ -78,3 +78,17 @@ class Task {
 extension TaskPriorityLabel on TaskPriority {
   String get label => name.toUpperCase();
 }
+
+//Tweak para el formato de la visualizacion en pantalla del tiempo'
+extension DurationLabel on int {
+  String get asDuration {
+    final h = this ~/ 60;
+    final m = this % 60;
+
+    if (h == 0) {
+      return '$m min';
+    } else {
+      return '$h h $m min';
+    }
+  }
+}

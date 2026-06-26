@@ -174,7 +174,7 @@ class _TaskCard extends StatelessWidget {
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Text(
-            '${_formatTime()}  ·  ${task.durationMinutes} min  ·  ${_categoryLabel()}',
+            '${_formatTime()}  ·  ${task.durationMinutes.asDuration}  ·  ${_categoryLabel()}',
           ),
         ),
 
