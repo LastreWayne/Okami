@@ -39,6 +39,21 @@ class TaskProvider extends ChangeNotifier {
     _tasks
       ..clear()
       ..addAll(decoded.map((item) => Task.fromJson(item as Map<String, dynamic>)));
+
+    //Revisar si alguna task que se repite debe ser rolleada
+    DateTime now = DateTime.now();
+    bool changed = false;
+
+    for (int i = 0; i < _tasks.length; i++) {
+      final rolled = _tasks[i].rollToCurrentWeek(now);
+
+      if (!identical(rolled, _tasks[i])) {
+        _tasks[i] = rolled;
+        changed = true;
+      }
+    }
+
+    if (changed) _save();
     notifyListeners();//Le dice al sistema que se actualizaron los datos
   }
 

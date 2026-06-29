@@ -89,6 +89,35 @@ class Task {
            ? DateTime.parse(json['completedAt'] as String) //String a DateTime
            : null
   );
+
+  //Funcion para filtrar y manejar la repeticion semanal con el metodo roll forward
+  Task rollToCurrentWeek(DateTime now) {
+    if (!repeatsWeekly) return this; //Si no se repite a la semana se ignora
+
+    final today = DateTime(now.year, now.month, now.day);
+    final monday = today.subtract(Duration(days: now.weekday - 1)); //Encuentra el lunes de esta semana
+    
+    if (!dateTime.isBefore(monday)) return this; //Si no esta en el pasado aun no es momento de rollear la task
+    
+    final taskDate = DateTime(dateTime.year, dateTime.month, dateTime.day);
+    final daysBehind = monday.difference(taskDate).inDays;
+    final weeks = (daysBehind / 7).ceil();
+
+    Task newtask = Task(//Reconstruir nueva task para rollear
+      id: id,
+      title: title,
+      description: description,
+      dateTime: dateTime.add(Duration(days: weeks * 7)), //Reajustar a la siguente semana
+      durationMinutes: durationMinutes,
+      priority: priority,
+      category: category,
+      status: TaskStatus.pending, //Regresa el status a pendiente
+      repeatsWeekly: repeatsWeekly,
+      completedAt: null, //Le hace reset
+      );
+
+    return newtask;
+  }
 }
 
 
