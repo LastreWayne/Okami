@@ -85,10 +85,17 @@ class _LockInScreenState extends State<LockInScreen> {
 
   //Convierte segundos al formato indicado para mostrar en pantalla
   String _formatTime(int seconds) {
-    final minutes = seconds ~/ 60; //division entera
+    final hours = seconds ~/ 3600;
+    final minutes = (seconds % 3600) ~/ 60; //division entera
     final secs = seconds % 60; //mod
 
-    return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}'; //formateo MM:SS
+    if (seconds >= 3600) {
+      return '${hours.toString()}:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+    }
+    else {
+      return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}'; //formateo MM:SS
+    }
+    
   }
 
   //Cancelo el timer al salir
