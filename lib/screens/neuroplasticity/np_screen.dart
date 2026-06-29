@@ -107,7 +107,7 @@ class NeuPlaScreen extends StatelessWidget {
         final task = tasks[idx];
         return TaskRow(
           task: task,
-          onTap: () {
+          onTap: task.isLocked ? null : () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => EditTaskScreen(task: task)),

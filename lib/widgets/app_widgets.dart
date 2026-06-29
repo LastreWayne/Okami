@@ -182,7 +182,7 @@ class GradientButton extends StatelessWidget {
 /// A single task as a tappable ink card with a gradient priority bar.
 class TaskRow extends StatelessWidget {
   final Task task;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   const TaskRow({super.key, required this.task, required this.onTap});
 
   Color get _priorityColor {
@@ -213,6 +213,17 @@ class TaskRow extends StatelessWidget {
     return '$h:$m  ·  ${task.durationMinutes.asDuration}  ·  $_categoryLabel';
   }
 
+  Widget get _trailing {
+    switch (task.status) {
+      case TaskStatus.completed:
+        return const Icon(Icons.check_circle, color: AppColors.ultramarine, size: 30);
+      case TaskStatus.finishedEarly:
+        return const Icon(Icons.flag_outlined, color: AppColors.inkFaint, size: 30);
+      case TaskStatus.pending:
+        return const Icon(Icons.chevron_right, color: AppColors.inkFaint, size: 30);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -221,7 +232,9 @@ class TaskRow extends StatelessWidget {
       child: InkCard(
         onTap: onTap,
         padding: const EdgeInsets.all(14),
-        child: Row(
+        child: Opacity(
+          opacity: task.isLocked ? 0.45 : 1.0,
+          child: Row(
           children: [
             Container(
               width: 4,
@@ -242,9 +255,10 @@ class TaskRow extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: AppColors.inkFaint, size: 20),
+            _trailing,
           ],
-        ),
+         ),
+        )
       ),
     );
   }

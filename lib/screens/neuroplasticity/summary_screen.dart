@@ -93,6 +93,7 @@ class SummaryScreen extends StatelessWidget {
                 width: double.infinity,
                 child:  FilledButton(
                   onPressed: () {
+                    //Datos pasados a la BD para la dashboard y estadisticas 
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
                   child: const Padding(

@@ -1,7 +1,9 @@
 import 'dart:async'; //import para el timer
 import 'package:flutter/material.dart';
+import 'package:okami/providers/task_provider.dart';
 import 'package:okami/screens/neuroplasticity/summary_screen.dart';
 import 'package:okami/models/task_model.dart';
+import 'package:provider/provider.dart';
 
 class LockInScreen extends StatefulWidget {
   final Task task;
@@ -208,7 +210,7 @@ class _LockInScreenState extends State<LockInScreen> {
         content: const Text('There is still time left. Finish your Task'),
         actions: [
 
-          //Boton para seguri la task
+          //Boton para seguir la task
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Resume the Task')
@@ -230,6 +232,15 @@ class _LockInScreenState extends State<LockInScreen> {
 
   //Pasar los datos al summary screen
   void _goToSummary() {
+
+    final status = _remainingSeconds == 0 //Revisar si se completo el tiempo par el estado
+        ? TaskStatus.completed
+        : TaskStatus.finishedEarly;
+
+    context.read<TaskProvider>().updateTask(//Actualiza el estado y el tiempo en el que se completo la task
+      widget.task.copyWith(status: status, completedAt: DateTime.now())
+    );
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => SummaryScreen(

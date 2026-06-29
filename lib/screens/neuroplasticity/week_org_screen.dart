@@ -147,7 +147,10 @@ class _TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Opacity(
+      opacity: task.isLocked ? 0.5 : 1.0,
+      
+      child: Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -178,17 +181,17 @@ class _TaskCard extends StatelessWidget {
           ),
         ),
 
-        //Indicador de repeticion semanal
-        trailing: task.repeatsWeekly
-            ? Icon(
-                Icons.repeat,
-                size: 18,
-                color: Theme.of(context).colorScheme.secondary,
-              )
-            : null,
+        //Indicador de estado y repeticion
+        trailing: task.isLocked
+          ? Icon(task.status == TaskStatus.completed ? Icons.check_circle : Icons.flag_outlined,
+             size: 30,
+             color: task.status == TaskStatus.completed ? AppColors.ultramarine : AppColors.inkFaint,
+          )
+          : (task.repeatsWeekly ? Icon(Icons.repeat, size: 30, color: Theme.of(context).colorScheme.secondary) : null
+          ),
 
         //Tocar la card abre la edicion de esa task
-        onTap: () {
+        onTap: task.isLocked ? null : () {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -197,6 +200,7 @@ class _TaskCard extends StatelessWidget {
           );
         },
       ),
-    );
+    )
+   );
   }
 }

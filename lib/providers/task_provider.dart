@@ -85,6 +85,8 @@ class TaskProvider extends ChangeNotifier {
     final now = DateTime.now();
 
     for (final task in _tasks) {
+      if (task.isLocked) continue;//Condicional para ignorar tasks que ya han sido completadas
+
       final windowStart = task.dateTime.subtract(const Duration(minutes: 15));
       final windowEnd = task.dateTime.add(Duration(minutes: task.durationMinutes));
 
@@ -102,6 +104,7 @@ class TaskProvider extends ChangeNotifier {
 
     for (final task in _tasks) {//Revisa las tasks existentes y confirma si hay conflictos
       if (task.id == ignoreId) continue; //Evita que la task se choque con ella misma
+      if (task.isLocked) continue; //Ignorar la task si ya fue completada
 
       final start = task.dateTime;
       final end = task.dateTime.add(Duration(minutes: task.durationMinutes));

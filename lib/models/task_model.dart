@@ -1,6 +1,7 @@
 
 enum TaskCategory { body, neuroplasticity, motion }
 enum TaskPriority { a, b, c }
+enum TaskStatus { pending, completed, finishedEarly }
 
 class Task {
   final String id;
@@ -11,6 +12,8 @@ class Task {
   final TaskPriority priority;
   final TaskCategory category;
   final bool repeatsWeekly;
+  final TaskStatus status;
+  final DateTime? completedAt;
 
   Task({
     required this.id,
@@ -21,6 +24,8 @@ class Task {
     required this.category,
     this.description = '',
     this.repeatsWeekly = false,
+    this.status = TaskStatus.pending,
+    this.completedAt
 
   });
 
@@ -33,6 +38,9 @@ class Task {
     TaskPriority? priority,
     TaskCategory? category,
     bool? repeatsWeekly,
+    TaskStatus? status,
+    DateTime? completedAt
+
   }) {
     return Task(
       id: id,
@@ -43,8 +51,13 @@ class Task {
       priority: priority ??  this.priority,
       category: category ?? this.category,
       repeatsWeekly: repeatsWeekly ?? this.repeatsWeekly,
+      status: status ?? this.status,
+      completedAt: completedAt ?? this.completedAt
     );
   }
+
+  //Getter para el bloqueo despues de completar una task
+  bool get isLocked => status != TaskStatus.pending;
 
   //Para el manejo de persistencia. Convertir Task a un mapa JSON-friendly
   //Los datos que requieren esto son DateTime y enums (priority/category)
@@ -52,11 +65,13 @@ class Task {
     'id': id,
     'title': title,
     'description': description,
-    'dateTime': dateTime.toIso8601String(), //Se pasa a string
+    'dateTime': dateTime.toIso8601String(), //DateTime Se pasa a string
     'durationMinutes': durationMinutes,
-    'priority': priority.name, //Se pasa a string
-    'category': category.name, //Se pasa a string
+    'priority': priority.name, //enum Se pasa a string
+    'category': category.name, //enum Se pasa a string
     'repeatsWeekly': repeatsWeekly,
+    'status': status.name, //Se pasa a string
+    'completedAt': completedAt?.toIso8601String(),//DateTime Se pasa a string
   };
 
   //Ahora reconstruye desde JSON a la Task
@@ -69,6 +84,10 @@ class Task {
     priority: TaskPriority.values.byName(json['priority'] as String), //String a enum
     category: TaskCategory.values.byName(json['category'] as String), //String a enum
     repeatsWeekly: json['repeatsWeekly'] as bool,
+    status: TaskStatus.values.byName(json['status'] as String), //String a enum
+    completedAt: json['completedAt'] != null
+           ? DateTime.parse(json['completedAt'] as String) //String a DateTime
+           : null
   );
 }
 
