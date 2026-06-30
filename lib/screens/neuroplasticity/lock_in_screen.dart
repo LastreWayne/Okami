@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:okami/providers/task_provider.dart';
 import 'package:okami/screens/neuroplasticity/summary_screen.dart';
 import 'package:okami/models/task_model.dart';
+import 'package:okami/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class LockInScreen extends StatefulWidget {
@@ -13,7 +14,16 @@ class LockInScreen extends StatefulWidget {
   State<LockInScreen> createState() => _LockInScreenState();
 }
 
-class _LockInScreenState extends State<LockInScreen> {
+class _LockInScreenState extends State<LockInScreen> with SingleTickerProviderStateMixin {
+
+  //Declarar control para la animacion
+  late final AnimationController _bloomController;
+  late final Animation<double> _bloomScale;
+  late final Animation<double> _bloomFade;
+  late final Animation<double> _numberFade;
+  late final Animation<double> _kanjiFade;
+
+  bool _celebrated = false; //Centinela para saber cuando ya paso la animacion
 
   //Duracion total de la sesion
   late int _totalSeconds;
@@ -30,6 +40,19 @@ class _LockInScreenState extends State<LockInScreen> {
   @override  
   void initState() {
     super.initState();
+    _bloomController = AnimationController(vsync: this, duration: const Duration(milliseconds: 700));
+    _bloomScale = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _bloomController, curve: Curves.easeOutCirc)
+    );
+    _bloomFade = Tween(begin: 0.55, end: 0.0).animate(
+      CurvedAnimation(parent: _bloomController, curve: Curves.easeOut)
+    );
+    _numberFade = Tween(begin: 1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _bloomController, curve: const Interval(0.0, 0.5, curve: Curves.easeOut))
+    );
+    _kanjiFade  = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _bloomController, curve: const Interval(0.4, 1.0, curve: Curves.easeIn))
+    );
     _calcTime();
     _startTimer();
   }
@@ -51,6 +74,7 @@ class _LockInScreenState extends State<LockInScreen> {
       setState(() {
         if (_remainingSeconds > 0) {
           _remainingSeconds--;
+          if (_remainingSeconds == 0) _onComplete(); //Fire animation
         } else {
           //llego a cero se detiene
           _timer?.cancel();
@@ -70,6 +94,15 @@ class _LockInScreenState extends State<LockInScreen> {
         _isPaused = true;
       }
     });
+  }
+
+  //Handler para el para la animacion de cumplimiento
+  void _onComplete() {
+    if (_celebrated) return; //Ya se disparo la animacion, que no se repita
+
+    _celebrated = true;
+    _timer?.cancel();
+    _bloomController.forward();
   }
 
   //Estado de la sesion para mostrarlo en pantalla
@@ -102,6 +135,7 @@ class _LockInScreenState extends State<LockInScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _bloomController.dispose();
     super.dispose();
   }
 
@@ -156,11 +190,47 @@ class _LockInScreenState extends State<LockInScreen> {
                       ),
                     ),
 
-                    //El tiempo
-                    Text(
-                      _formatTime(_remainingSeconds),
-                      style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w300),
+                    //Animacion
+                    FadeTransition(
+                      opacity: _bloomFade,
+                      child: ScaleTransition(
+                        scale: _bloomScale,
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                Theme.of(context).colorScheme.primary.withValues(alpha: 0.6),
+                                Theme.of(context).colorScheme.primary.withValues(alpha: 0.0)
+                              ]
+                            )
+                          ),
+                        ),
+                      ),
                     ),
+
+                    //El tiempo
+                    FadeTransition(
+                      opacity: _numberFade,
+                      child: Text(
+                        _formatTime(_remainingSeconds),
+                        style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                    FadeTransition(
+                      opacity: _kanjiFade,
+                      child: Text(
+                        '完',
+                        style: TextStyle(
+                          fontFamily: AppFonts.mincho,
+                          fontSize: 96,
+                          color: Theme.of(context).colorScheme.primary
+                        ),
+                      ),
+                    )
+                    
                   ],
                 ),
               ),

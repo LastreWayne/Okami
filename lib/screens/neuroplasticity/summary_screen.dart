@@ -71,7 +71,7 @@ class SummaryScreen extends StatelessWidget {
                         context,
                         icon: Icons.hourglass_bottom,
                         label: 'Time completed',
-                        value: _formatDuration(plannedSeconds),
+                        value: _formatDuration(actualSeconds),
                       ),
 
                       const Divider(height: 24),
