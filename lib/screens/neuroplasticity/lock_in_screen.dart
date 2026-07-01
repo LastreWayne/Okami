@@ -1,10 +1,12 @@
 import 'dart:async'; //import para el timer
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:okami/providers/task_provider.dart';
 import 'package:okami/screens/neuroplasticity/summary_screen.dart';
 import 'package:okami/models/task_model.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:provider/provider.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class LockInScreen extends StatefulWidget {
   final Task task;
@@ -22,6 +24,8 @@ class _LockInScreenState extends State<LockInScreen> with SingleTickerProviderSt
   late final Animation<double> _bloomFade;
   late final Animation<double> _numberFade;
   late final Animation<double> _kanjiFade;
+
+  final AudioPlayer _player = AudioPlayer();
 
   bool _celebrated = false; //Centinela para saber cuando ya paso la animacion
 
@@ -52,6 +56,11 @@ class _LockInScreenState extends State<LockInScreen> with SingleTickerProviderSt
     );
     _kanjiFade  = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _bloomController, curve: const Interval(0.4, 1.0, curve: Curves.easeIn))
+    );
+    AudioPlayer.global.setAudioContext(
+      AudioContext(
+        iOS: AudioContextIOS(category: AVAudioSessionCategory.playback),
+      )
     );
     _calcTime();
     _startTimer();
@@ -102,6 +111,8 @@ class _LockInScreenState extends State<LockInScreen> with SingleTickerProviderSt
 
     _celebrated = true;
     _timer?.cancel();
+    HapticFeedback.mediumImpact(); //Vibracion
+    _player.play(AssetSource('sound_fx/timer_completion.mp3'));
     _bloomController.forward();
   }
 
@@ -136,6 +147,7 @@ class _LockInScreenState extends State<LockInScreen> with SingleTickerProviderSt
   void dispose() {
     _timer?.cancel();
     _bloomController.dispose();
+    _player.dispose();
     super.dispose();
   }
 
