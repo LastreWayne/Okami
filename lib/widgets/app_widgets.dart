@@ -263,3 +263,80 @@ class TaskRow extends StatelessWidget {
     );
   }
 }
+
+//Card para navegar a las subscreens de Body
+class NavCard extends StatelessWidget {
+  final String label;
+  final String sublabel;
+  final String backgroundImg;
+  final VoidCallback? onTap;
+
+  const NavCard({
+    required this.label,
+    required this.sublabel,
+    required this.backgroundImg,
+    required this.onTap,
+    super.key
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkCard(
+      onTap: onTap,
+      padding: EdgeInsets.zero,
+      child: SizedBox(
+        height: 200,
+        child: Stack(
+          children: [
+
+            Positioned.fill(
+              child: Image.asset(
+                backgroundImg,
+                fit: BoxFit.cover,
+              ),
+            ),
+
+            Positioned.fill(child: Container(
+              color: Colors.black.withValues(alpha: 0.3),
+            )),
+
+            
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  
+
+                  Text(
+                    label,
+                    style: const TextStyle(
+                    fontFamily: AppFonts.inter,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,  
+                    color: AppColors.ink
+                    ),
+                  ),
+
+                  SizedBox(height: 4),
+
+                  Text(
+                    sublabel,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                    fontFamily: AppFonts.inter,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    color: AppColors.ink
+                    ),
+                  )
+
+                ],
+              ),
+            )
+          ],
+        ),
+      )
+    );
+  }
+}
+
