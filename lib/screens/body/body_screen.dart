@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:okami/screens/body/diet_screen.dart';
+import 'package:okami/screens/body/intake_screen.dart';
 import 'package:okami/screens/body/work_out_screen.dart';
 import 'package:okami/widgets/app_widgets.dart';
 
@@ -53,7 +54,7 @@ class BodyScreen extends StatelessWidget {
                 backgroundImg: 'assets/images/suplements.jpg',
                 onTap: () => Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (_) => const WorkOutScreen())
+                  MaterialPageRoute(builder: (_) => const IntakeScreen())
                 )
               ),
           
