@@ -129,8 +129,6 @@ class _TaskCard extends StatelessWidget {
   //Nombre legible de la categoria
   String _categoryLabel() {
     switch (task.category) {
-      case TaskCategory.body:
-        return 'Body';
       case TaskCategory.neuroplasticity:
         return 'Neuroplasticity';
       case TaskCategory.motion:

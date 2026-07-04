@@ -1,5 +1,5 @@
 
-enum TaskCategory { body, neuroplasticity, motion }
+enum TaskCategory { neuroplasticity, motion }
 enum TaskPriority { a, b, c }
 enum TaskStatus { pending, completed, finishedEarly }
 

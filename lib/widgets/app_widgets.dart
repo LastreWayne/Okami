@@ -198,8 +198,6 @@ class TaskRow extends StatelessWidget {
 
   String get _categoryLabel {
     switch (task.category) {
-      case TaskCategory.body:
-        return 'Body';
       case TaskCategory.neuroplasticity:
         return 'Neuroplasticity';
       case TaskCategory.motion:

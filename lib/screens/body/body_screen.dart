@@ -26,7 +26,7 @@ class BodyScreen extends StatelessWidget {
 
               NavCard(//Card de Workout
                 label: 'Work Out',
-                sublabel: 'Bring your pyhisique to your limits',
+                sublabel: 'Bring your physique to your limits',
                 backgroundImg: 'assets/images/c_gym.jpg',
                 onTap: () => Navigator.push(
                   context, 

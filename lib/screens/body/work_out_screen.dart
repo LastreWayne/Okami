@@ -7,7 +7,7 @@ class WorkOutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Work Out — Bring your pyhisique to your limits'),
+        child: Text('Work Out — Bring your physique to your limits'),
       ),
     );
   }

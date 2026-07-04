@@ -60,8 +60,6 @@ class CategorySelector extends StatelessWidget {
   //Helper para el display de los nombres de las categorias
   String _label(TaskCategory cat) {
     switch (cat) {
-      case TaskCategory.body:
-        return 'Body';
       case TaskCategory.neuroplasticity:
         return 'Neuroplasticity';
       case TaskCategory.motion:
