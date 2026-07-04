@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:okami/providers/workout_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/screens/splash_screen.dart';
@@ -13,8 +14,11 @@ class OkamiApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => TaskProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => TaskProvider()),
+        ChangeNotifierProvider(create: (_) => WorkoutProvider()),
+      ],
       child: MaterialApp(
         title: 'Ōkami',
         theme: AppTheme.darkTheme,
