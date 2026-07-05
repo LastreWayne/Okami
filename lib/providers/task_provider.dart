@@ -15,7 +15,7 @@ class TaskProvider extends ChangeNotifier {
   }
 
   //getter publico para solo lectura.
-  List <Task> get tasks => List.unmodifiable(_tasks);
+  List<Task> get tasks => List.unmodifiable(_tasks);
 
 
 //PERSISTENCIA DE LAS TASKS

@@ -89,7 +89,7 @@ class NeuPlaScreen extends StatelessWidget {
               //Lista de Tasks
               Expanded(
                 child: todayTasks.isEmpty
-                    ? _buildEmptyState(context)
+                    ? BuildEmptyState(msg: 'No Tasks planned today!')
                     : _buildTaskList(context, todayTasks),
               ),
             ],
@@ -118,20 +118,4 @@ class NeuPlaScreen extends StatelessWidget {
     );
   }
 
-  //Task list (Estado vacio)
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const KanjiWatermark(size: 120),
-          const SizedBox(height: 8),
-          Text(
-            'No tasks yet',
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 20),
-          ),
-        ],
-      ),
-    );
-  }
 }

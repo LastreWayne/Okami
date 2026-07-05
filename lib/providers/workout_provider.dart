@@ -22,6 +22,12 @@ class WorkoutProvider extends ChangeNotifier {
     _load();
   }
 
+  //Getters publicos para la lectura de datos
+  List<Exercise> get exercises => List.unmodifiable(_exercises);
+  List<Routine> get routines => List.unmodifiable(_routines);
+  List<WorkOutSession> get sessions => List.unmodifiable(_workoutSessions);
+  
+
 //PERSISTENCIA
   
   //Save general para los tres modelos

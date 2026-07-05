@@ -338,3 +338,24 @@ class NavCard extends StatelessWidget {
   }
 }
 
+class BuildEmptyState extends StatelessWidget {
+  final String msg;
+  const BuildEmptyState({super.key, required this.msg});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const KanjiWatermark(size: 120),
+          const SizedBox(height: 8),
+          Text(
+            msg,
+            style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontSize: 20),
+          ),
+        ],
+      ),
+    );
+  }
+}
