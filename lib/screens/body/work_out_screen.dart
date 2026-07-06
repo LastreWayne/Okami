@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:okami/providers/workout_provider.dart';
+import 'package:okami/screens/body/exercise_vault_screen.dart';
 import 'package:okami/widgets/workout_widgets.dart';
 import 'package:okami/widgets/app_widgets.dart';
 import 'new_routine_screen.dart';
@@ -36,7 +37,7 @@ class WorkOutScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NewRoutineScreen())
+                    MaterialPageRoute(builder: (context) => ExerciseVaultScreen())
                   );
                 }
               )

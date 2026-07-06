@@ -107,7 +107,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           children: [
 
             //Titulo
-            const FieldLabel('Title'),
+            const FieldLabel('Task title'),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(hintText: 'The TASK'),
@@ -116,7 +116,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             //Descripcion
             const SizedBox(height: 20),
 
-            const FieldLabel('Descripcion'),
+            const FieldLabel('Task description'),
             TextField(
               controller: _descriptionController,
               maxLines: 1,
@@ -133,7 +133,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Date / Time'),
+                      const FieldLabel('Taske Date'),
                       Row(
                         children: [
 
@@ -173,7 +173,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Duration'),
+                      const FieldLabel('Task Duration'),
                       DurationSelector(
                         value: _durationMinutes,
                         onChanged: (m) => setState(() => _durationMinutes = m)
@@ -186,7 +186,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
             //Prioridad
             const SizedBox(height: 20),
-            const FieldLabel('Priority'),
+            const FieldLabel('Task Priority'),
             PrioritySelector(
               value: _priority,
               onChanged: (p) => setState(() => _priority = p),
@@ -194,7 +194,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
             //Categoria
             const SizedBox(height: 20),
-            const FieldLabel('Category'),
+            const FieldLabel('Task Category'),
             CategorySelector(
               value: _category,
               onChanged: (c) => setState(() => _category = c),
@@ -206,6 +206,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             RepeatToggle(
               value: _repeatsWeekly,
               onChanged: (r) => setState(() => _repeatsWeekly = r),
+              trueMsg: 'Every week',
+              falseMsg: 'Does not repeat',
             ),
             
 

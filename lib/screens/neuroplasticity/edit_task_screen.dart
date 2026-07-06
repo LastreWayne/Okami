@@ -216,6 +216,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             RepeatToggle(
               value: _repeatsWeekly,
               onChanged: (r) => setState(() => _repeatsWeekly = r),
+              trueMsg: 'Every week',
+              falseMsg: 'Does not repeat',
             ),
 
             //Boton para guardar cambios

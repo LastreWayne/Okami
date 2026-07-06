@@ -4,6 +4,9 @@ import 'package:okami/models/routine_model.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/widgets/app_widgets.dart';
 
+
+//WIDGETS DE EJERCICIOS
+
 //Tarjeta visualizadora de un ejercicio
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -59,6 +62,50 @@ class ExerciseCard extends StatelessWidget {
 
 }
 
+
+//Selector de categoria
+
+class ExerciseCategorySelector extends StatelessWidget {
+  final ExerciseCategory value;
+  final ValueChanged<ExerciseCategory> onChanged;
+
+  const ExerciseCategorySelector({
+    super.key,
+    required this.value,
+    required this.onChanged
+  });
+
+  //Helper para el display de nombres
+  String _label(ExerciseCategory cat) {
+    switch (cat) {
+      case ExerciseCategory.cardio:
+        return 'Cardio';
+      case ExerciseCategory.pull:
+        return 'Pull';
+      case ExerciseCategory.push:
+        return 'Push';
+      case ExerciseCategory.resistance:
+        return 'Resistance';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 8,
+      children: ExerciseCategory.values.map((cat) {
+        return ChoiceChip(
+          label: Text(_label(cat)),
+          selected: value == cat,
+          onSelected: (_) => onChanged(cat),
+        );
+      }).toList(),
+    );
+  }
+}
+
+
+//WIDGETS DE RUTINAS
 
 //Tarjeta visualizadora de una rutina
 class RoutineCard extends StatelessWidget {

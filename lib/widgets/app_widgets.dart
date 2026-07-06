@@ -338,6 +338,7 @@ class NavCard extends StatelessWidget {
   }
 }
 
+//Estados vacios de listview
 class BuildEmptyState extends StatelessWidget {
   final String msg;
   const BuildEmptyState({super.key, required this.msg});
@@ -359,3 +360,44 @@ class BuildEmptyState extends StatelessWidget {
     );
   }
 }
+
+//Seleccionador numerico (- val +)
+class NumberStepper extends StatelessWidget {
+  final int value;
+  final int min;
+  final ValueChanged<int> onChanged;
+
+  const NumberStepper({
+    super.key,
+    this.value = 1,
+    this.min = 0,
+    required this.onChanged
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(//Boton de resta
+          onPressed: value > min ? () => onChanged(value - 1) : null,
+          icon: Icon(Icons.remove_circle_outline)
+        ),
+        SizedBox(
+          width: 32,
+          child: Text(
+            value.toString(),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        IconButton(
+          onPressed: () => onChanged(value + 1),
+          icon: Icon(Icons.add_circle_outline)
+        )
+
+      ],
+    );
+  }
+
+
+}
+

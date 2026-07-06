@@ -86,11 +86,15 @@ class CategorySelector extends StatelessWidget {
 //Togle de repeticion
 class RepeatToggle extends StatelessWidget {
   final bool value;
+  final String trueMsg;
+  final String falseMsg;
   final ValueChanged<bool> onChanged;
 
   const RepeatToggle({
     super.key,
     required this.value,
+    required this.trueMsg,
+    required this.falseMsg,
     required this.onChanged,
   });
 
@@ -99,7 +103,7 @@ class RepeatToggle extends StatelessWidget {
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(
-        value ? 'Every week' : 'Does not repeat',
+        value ? trueMsg : falseMsg,
         style: const TextStyle(fontSize: 14),
       ),
       value: value,
