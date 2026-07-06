@@ -118,7 +118,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           children: [
 
             //Titulo
-            const FieldLabel('Title'),
+            const FieldLabel('Task Title'),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(hintText: 'The TASK'),
@@ -126,7 +126,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
             //Descripcion
             const SizedBox(height: 20),
-            const FieldLabel('Description'),
+            const FieldLabel('Task Description'),
             TextField(
               controller: _descriptionController,
               maxLines: 1,
@@ -142,7 +142,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Date / Time'),
+                      const FieldLabel('Task Date'),
                       Row(
                         children: [
 
@@ -182,7 +182,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Duration'),
+                      const FieldLabel('Task Duration'),
                       DurationSelector(
                         value: _durationMinutes,
                         onChanged: (m) => setState(() => _durationMinutes = m)
@@ -196,7 +196,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
             //Prioridad
             const SizedBox(height: 20),
-            const FieldLabel('Priority'),
+            const FieldLabel('Task Priority'),
             PrioritySelector(
               value: _priority,
               onChanged: (p) => setState(() => _priority = p),
@@ -204,7 +204,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
             //Categoria
             const SizedBox(height: 20),
-            const FieldLabel('Category'),
+            const FieldLabel('Task Category'),
             CategorySelector(
               value: _category,
               onChanged: (c) => setState(() => _category = c),

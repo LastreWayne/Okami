@@ -107,7 +107,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           children: [
 
             //Titulo
-            const FieldLabel('Task title'),
+            const FieldLabel('Task Title'),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(hintText: 'The TASK'),
@@ -116,7 +116,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             //Descripcion
             const SizedBox(height: 20),
 
-            const FieldLabel('Task description'),
+            const FieldLabel('Task Description'),
             TextField(
               controller: _descriptionController,
               maxLines: 1,
@@ -133,7 +133,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 
-                      const FieldLabel('Taske Date'),
+                      const FieldLabel('Task Date'),
                       Row(
                         children: [
 

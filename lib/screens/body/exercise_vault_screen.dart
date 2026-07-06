@@ -64,7 +64,7 @@ Widget _buildExerciseList(BuildContext context, List<Exercise> exercises) {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditExerciseScreen( ))
+            MaterialPageRoute(builder: (context) => EditExerciseScreen(exercise: exercise))
           );
         },
       );

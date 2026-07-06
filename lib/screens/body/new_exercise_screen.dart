@@ -45,8 +45,9 @@ class _NewExerciseScreenState extends State<NewExerciseScreen> {
     final newExercise = Exercise(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
       category: _category,
-      bodyweight: _bodyweight,
+      bodyweight: _category == ExerciseCategory.cardio ? false : _bodyweight,
       targetSets: _targetSets,
       repsPerSet: _repsPerSet,
     );

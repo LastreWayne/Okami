@@ -369,8 +369,8 @@ class NumberStepper extends StatelessWidget {
 
   const NumberStepper({
     super.key,
-    this.value = 1,
-    this.min = 0,
+    required this.value,
+    this.min = 1,
     required this.onChanged
   });
 
@@ -380,18 +380,21 @@ class NumberStepper extends StatelessWidget {
       children: [
         IconButton(//Boton de resta
           onPressed: value > min ? () => onChanged(value - 1) : null,
-          icon: Icon(Icons.remove_circle_outline)
+          icon: Icon(Icons.remove_circle_outline),
+          iconSize: 40,
         ),
         SizedBox(
-          width: 32,
+          width: 40,
           child: Text(
             value.toString(),
             textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20),
           ),
         ),
         IconButton(
           onPressed: () => onChanged(value + 1),
-          icon: Icon(Icons.add_circle_outline)
+          icon: Icon(Icons.add_circle_outline),
+          iconSize: 40,
         )
 
       ],
