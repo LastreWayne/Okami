@@ -20,11 +20,12 @@ class ExerciseVaultScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               //Titulo
-              SectionTitle(title: 'Exercise Vault', subtitle: 'Your stored heart of a Routine!'),
+              const SectionTitle(title: 'Exercise Vault', subtitle: 'Your stored heart of a Routine!'),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               //List view situacional
               Expanded(
@@ -32,6 +33,8 @@ class ExerciseVaultScreen extends StatelessWidget {
                     ? BuildEmptyState(msg: 'Your Exercise Vault is empty!')
                     : _buildExerciseList(context, exercises)
               ),
+
+              const SizedBox(height: 20),
 
               //Boton para crear un nuevo ejercicio
               GradientButton(

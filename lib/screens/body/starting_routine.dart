@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NewRoutineScreen extends StatelessWidget {
-  const NewRoutineScreen({super.key});
+class StartingRoutine extends StatelessWidget {
+  const StartingRoutine({super.key});
 
   @override
   Widget build(BuildContext context) {

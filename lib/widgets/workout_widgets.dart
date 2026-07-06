@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:okami/models/exercise_model.dart';
+import 'package:okami/models/routine_model.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/widgets/app_widgets.dart';
 
+//Tarjeta visualizadora de un ejercicio
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
   final VoidCallback? onTap;
@@ -55,4 +57,64 @@ class ExerciseCard extends StatelessWidget {
     return '$cat · ${exercise.targetSets} x ${exercise.repsPerSet}$bw';
   }
 
+}
+
+
+//Tarjeta visualizadora de una rutina
+class RoutineCard extends StatelessWidget {
+  final Routine routine;
+  final VoidCallback? onTap;
+  final VoidCallback onPressed;
+
+  const RoutineCard({
+    super.key,
+    required this.routine,
+    this.onTap,
+    required this.onPressed
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsGeometry.only(bottom: 20),
+      child: InkCard(
+        onTap: onTap,
+        child: Row(
+          children: [
+            
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    //Datos de la rutina
+                    Text(//Titulo
+                      'Example Routine',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(//Descripcion
+                      'Example description',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                    Text(//Total de ejercicios dentro de la rutina
+                      '10 Exercises',
+                      style: Theme.of(context).textTheme.labelMedium,
+                    )
+
+                  ],
+                ),
+              ),
+
+            SizedBox(//Boton para iniciar la rutina
+              width: 128,
+              child: GradientButton(
+                label: 'Start Routine',
+                onPressed: onPressed
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
