@@ -106,18 +106,22 @@ class _NewExerciseScreenState extends State<NewExerciseScreen> {
 
               //Series
               const FieldLabel('Sets'),
-              NumberStepper(
-                value: _targetSets,
-                onChanged: (v) => setState(() => _targetSets = v)
+              Center(
+                child: NumberStepper(
+                  value: _targetSets,
+                  onChanged: (v) => setState(() => _targetSets = v)
+                ),
               ),
 
               SizedBox(height: 16),
 
               //Repeticiones
               const FieldLabel('Reps per set'),
-              NumberStepper(
-                value: _repsPerSet,
-                onChanged: (r) => setState(() => _repsPerSet = r)
+              Center(
+                child: NumberStepper(
+                  value: _repsPerSet,
+                  onChanged: (r) => setState(() => _repsPerSet = r)
+                ),
               ),
 
               SizedBox(height: 20),

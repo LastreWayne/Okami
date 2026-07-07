@@ -37,7 +37,7 @@ class WorkOutScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ExerciseVaultScreen())
+                    MaterialPageRoute(builder: (context) => NewRoutineScreen())
                   );
                 }
               )

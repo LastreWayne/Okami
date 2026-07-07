@@ -11,11 +11,13 @@ import 'package:okami/widgets/app_widgets.dart';
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
   final VoidCallback? onTap;
+  final Widget? trailing;
 
   const ExerciseCard({
     super.key,
     required this.exercise,
     this.onTap,
+    this.trailing
   });
 
   @override
@@ -43,7 +45,7 @@ class ExerciseCard extends StatelessWidget {
               )
             ),
 
-            Icon(Icons.chevron_right, color: AppColors.inkFaint,)
+            trailing ?? Icon(Icons.chevron_right, color: AppColors.inkFaint,)
           ],
         ),
       )
