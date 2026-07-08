@@ -95,7 +95,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
           children: [
 
             //Titulo
-            const FieldLabel('Exercise title'),
+            const FieldLabel('Exercise Title'),
             TextField(
               controller: _titleController,
               decoration: const InputDecoration(hintText: 'The EXERCISE'),
@@ -104,7 +104,7 @@ class _EditExerciseScreenState extends State<EditExerciseScreen> {
             SizedBox(height: 20),
 
             //Descripcion
-            const FieldLabel('Exercise description'),
+            const FieldLabel('Exercise Description'),
             TextField(
               controller: _descriptionController,
               decoration: const InputDecoration(hintText: 'Anything specific?'),
