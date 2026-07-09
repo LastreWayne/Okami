@@ -7,4 +7,4 @@
 Features three main Dimensions that work around the users daily life
 and a personalized statistics dashboard.
 
-By David Lastre
+Personal coding project by David Lastre
