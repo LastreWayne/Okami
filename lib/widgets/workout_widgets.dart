@@ -22,10 +22,11 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkCard(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 12),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
+      child: InkCard(
+
+        onTap: onTap,
         child: Row(
           children: [
             Expanded(
@@ -138,15 +139,15 @@ class RoutineCard extends StatelessWidget {
 
                     //Datos de la rutina
                     Text(//Titulo
-                      'Example Routine',
+                      routine.title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Text(//Descripcion
-                      'Example description',
+                      routine.description,
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     Text(//Total de ejercicios dentro de la rutina
-                      '10 Exercises',
+                      '${routine.exerciseIds.length} Exercise${routine.exerciseIds.length == 1 ? '' : 's'}',
                       style: Theme.of(context).textTheme.labelMedium,
                     )
 
