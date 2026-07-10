@@ -147,7 +147,7 @@ class RoutineCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                     Text(//Total de ejercicios dentro de la rutina
-                      '${routine.exerciseIds.length} Exercise${routine.exerciseIds.length == 1 ? '' : 's'}',
+                      '· ${routine.exerciseIds.length} Exercise${routine.exerciseIds.length == 1 ? '' : 's'}',
                       style: Theme.of(context).textTheme.labelMedium,
                     )
 
@@ -155,11 +155,14 @@ class RoutineCard extends StatelessWidget {
                 ),
               ),
 
-            SizedBox(//Boton para iniciar la rutina
-              width: 128,
-              child: GradientButton(
-                label: 'Start Routine',
-                onPressed: onPressed
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: SizedBox(//Boton para iniciar la rutina
+                width: 128,
+                child: GradientButton(
+                  label: 'Start Routine',
+                  onPressed: onPressed
+                ),
               ),
             )
           ],

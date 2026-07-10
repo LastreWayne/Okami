@@ -107,6 +107,8 @@ class LockingInScreen extends StatelessWidget {
                 ),
               ),
             ),
+
+            SizedBox(height: 16)
           ],
         ),
       ),
