@@ -81,5 +81,7 @@ class WorkOutSession {
                     (value as List).map( (e) => PerformedSet.fromJson( e as Map<String, dynamic> ) ).toList()
       ),
     ),
+    totalDurationMinutes: json['totalDurationMinutes'] as int,
+    completed: json['completed'] as bool,
   );
 }

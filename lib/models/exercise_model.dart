@@ -7,15 +7,14 @@ class Exercise {
   final String description;
   final ExerciseCategory category;
   final bool bodyweight;
-  final int targetSets;
-  final int repsPerSet;
+  final List<int> targetReps;
+  int get targetSets => targetReps.length; //Geter derivado de target reps
 
   Exercise({
     required this.id,
     required this.title,
     required this.category,
-    this.targetSets = 3,
-    this.repsPerSet = 10,
+    required this.targetReps,
     this.description = '',
     this.bodyweight = false
   });
@@ -26,8 +25,7 @@ class Exercise {
     String? description,
     ExerciseCategory? category,
     bool? bodyweight,
-    int? targetSets,
-    int? repsPerSet
+    List<int>? targetReps,
   }) {
     return Exercise(
       id: id,
@@ -35,8 +33,7 @@ class Exercise {
       description: description ?? this.description,
       category: category ?? this.category,
       bodyweight: bodyweight ?? this.bodyweight,
-      targetSets: targetSets ?? this.targetSets,
-      repsPerSet: repsPerSet ?? this.repsPerSet
+      targetReps: targetReps ?? this.targetReps,
     );
   }
 
@@ -47,8 +44,7 @@ class Exercise {
     'description': description,
     'category': category.name,
     'bodyweight': bodyweight,
-    'targetSets': targetSets,
-    'repsPerSet': repsPerSet
+    'targetReps': targetReps,
   };
 
   factory Exercise.fromJson(Map<String, dynamic> json) => Exercise(
@@ -57,7 +53,6 @@ class Exercise {
     description: json['description'] as String,
     category: ExerciseCategory.values.byName(json['category'] as String),
     bodyweight: json['bodyweight'] as bool,
-    targetSets: json['targetSets'] as int,
-    repsPerSet: json['repsPerSet'] as int
+    targetReps: (json['targetReps'] as List).cast<int>(),
   );
 }

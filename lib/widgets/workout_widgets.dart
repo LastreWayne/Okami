@@ -60,7 +60,7 @@ class ExerciseCard extends StatelessWidget {
     if (exercise.category == ExerciseCategory.cardio) return '$cat · Timed';
     final bw = exercise.bodyweight ? ' · BW' : '';
 
-    return '$cat · ${exercise.targetSets} x ${exercise.repsPerSet}$bw';
+    return '$cat · ${exercise.targetReps.join(' | ')}$bw';
   }
 
 }

@@ -17,27 +17,60 @@ class _NewExerciseScreenState extends State<NewExerciseScreen> {
   //Controlers
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final List<TextEditingController> _repsControllers = [];
 
   //Variables para demas parametros de un Exercise
   ExerciseCategory _category = ExerciseCategory.push;
   bool _bodyweight = false;
-  int _targetSets = 3;
-  int _repsPerSet = 10;
+
+  //Estado inicial de controllers de ejercicio
+  @override
+  void initState() {
+    super.initState();
+    _repsControllers.addAll(
+      List.generate(3, (_) => TextEditingController(text: '10'))
+    );
+  }
 
   //Deshacerse de los controles al abandonar
   @override  
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    for (final c in _repsControllers) {
+      c.dispose();
+    }
     super.dispose();
+  }
+
+  //Exercise table
+  void _addSet() {
+    final seed = _repsControllers.isEmpty ? '10' : _repsControllers.last.text;
+    setState(() => _repsControllers.add(TextEditingController(text: seed)));
+  }
+
+  void _removeRow(int i) {
+    setState(() => _repsControllers.removeAt(i).dispose());
   }
 
   //Guardar datos del Exercise y mandarlos al provider
   void _saveExercise() {
 
+    final reps = _repsControllers //Extrae los datos de los controlers de texto
+      .map((c) => int.tryParse(c.text.trim()) ?? 0)
+      .toList();
+
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You need to provide a title'))
+      );
+      return;
+    }
+
+    if (_category != ExerciseCategory.cardio && 
+    (reps.isEmpty || reps.any((r) => r < 1))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('You need to set some reps'))
       );
       return;
     }
@@ -48,8 +81,7 @@ class _NewExerciseScreenState extends State<NewExerciseScreen> {
       description: _descriptionController.text.trim(),
       category: _category,
       bodyweight: _category == ExerciseCategory.cardio ? false : _bodyweight,
-      targetSets: _targetSets,
-      repsPerSet: _repsPerSet,
+      targetReps: _category == ExerciseCategory.cardio ? const [] : reps,
     );
     
     //Agregar Exercise al app state
@@ -104,24 +136,69 @@ class _NewExerciseScreenState extends State<NewExerciseScreen> {
             //Condicionales para el display de contabilidad segun categoria
             if (_category != ExerciseCategory.cardio) ...[
 
-              //Series
-              const FieldLabel('Sets'),
-              Center(
-                child: NumberStepper(
-                  value: _targetSets,
-                  onChanged: (v) => setState(() => _targetSets = v)
-                ),
-              ),
+              //Series/Reps Table
+              const FieldLabel('Exercise Sets/Reps'), 
+              Container(
+                color: Theme.of(context).colorScheme.onSecondary,
+                width: double.infinity,
+                child: Column(
+                  children: [
 
-              SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('SETS'),
+                        Text('REPS'),
+                        Container(width: 95,)
 
-              //Repeticiones
-              const FieldLabel('Reps per set'),
-              Center(
-                child: NumberStepper(
-                  value: _repsPerSet,
-                  onChanged: (r) => setState(() => _repsPerSet = r)
-                ),
+                      ],
+                    ),
+
+                    SizedBox(height: 16),
+                    
+                    ...List.generate(_repsControllers.length, (i) => Padding(
+                      padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Text(
+                            'Set ${i + 1}'
+                            ),
+                          
+
+                            SizedBox(
+                              width: 80,
+                              height: 50,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                textAlign: TextAlign.center,                             
+                                controller: _repsControllers[i],
+                              ),
+                            ),
+                      
+                            IconButton.filled(
+                              onPressed: () => _removeRow(i),
+                              icon: Icon(Icons.delete),
+                              highlightColor: Theme.of(context).colorScheme.error,
+                            )
+
+                          ],
+                        ),
+                      )
+                    ),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton.icon(
+                        onPressed: _addSet,
+                        icon: const Icon(Icons.add),
+                        label: const Text('Add Set'),
+                      ),
+                    ),
+
+                  ]
+                )
               ),
 
               SizedBox(height: 20),

@@ -101,7 +101,7 @@ class StartingRoutineScreen extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ActiveRoutineScreen(), 
+                      builder: (context) => ActiveRoutineScreen(routine: routine), 
                     ),
                   );
                 },
