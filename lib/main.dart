@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:okami/providers/active_session_provider.dart';
 import 'package:okami/providers/workout_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:okami/theme/app_theme.dart';
@@ -18,6 +19,7 @@ class OkamiApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskProvider()),
         ChangeNotifierProvider(create: (_) => WorkoutProvider()),
+        ChangeNotifierProvider(create: (_) => ActiveSessionProvider())
       ],
       child: MaterialApp(
         title: 'Ōkami',
