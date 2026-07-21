@@ -71,7 +71,10 @@ class ActiveSessionProvider extends ChangeNotifier {
   void addSet(String exId) {
     final sets = List<PerformedSet>.from(_session!.setsByExercise[exId]!);
     final reps = sets.isNotEmpty ? sets.last.reps : 0;
-    sets.add(PerformedSet(reps: reps));
+    sets.add(PerformedSet(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      reps: reps
+    ));
     _replaceExerciseSets(exId, sets);
   }
 
@@ -93,7 +96,12 @@ class ActiveSessionProvider extends ChangeNotifier {
       exerciseIds: exercises.map((e) => e.id).toList(),
       setsByExercise: {
         for (final ex in exercises)
-          ex.id: List.generate(ex.targetReps.length, (i) => PerformedSet(reps: ex.targetReps[i]))
+          ex.id: [
+            for (var i = 0; i < ex.targetReps.length; i++)
+              PerformedSet(id: '${DateTime.now().microsecondsSinceEpoch}_$i',
+              reps: ex.targetReps[i]
+              )
+          ]
       }
     );
     _persist();

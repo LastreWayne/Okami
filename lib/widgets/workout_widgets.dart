@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:okami/models/exercise_model.dart';
 import 'package:okami/models/routine_model.dart';
+import 'package:okami/models/workout_session_model.dart';
+import 'package:okami/providers/active_session_provider.dart';
 import 'package:okami/theme/app_theme.dart';
 import 'package:okami/widgets/app_widgets.dart';
+import 'dart:async';
+
+import 'package:provider/provider.dart';
 
 
 //WIDGETS DE EJERCICIOS
@@ -171,3 +176,175 @@ class RoutineCard extends StatelessWidget {
     );
   }
 }
+
+//SESION ACTIVA
+
+class SessionTimer extends StatefulWidget {
+  const SessionTimer({super.key});
+
+  @override  
+  State<SessionTimer> createState() => _SessionTimerState();
+}
+
+class _SessionTimerState extends State<SessionTimer> {
+  Timer? _ticker;
+
+  @override  
+  void initState() {
+    super.initState();
+    _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
+      setState(() {});
+    });
+  }
+
+  @override  
+  void dispose() {
+    _ticker?.cancel();
+    super.dispose();
+  }
+
+  String _formatTime(int seconds) {
+    final hours = seconds ~/ 3600;
+    final minutes = (seconds % 3600) ~/ 60; //division entera
+    final secs = seconds % 60; //mod
+
+    if (seconds >= 3600) {
+      return '${hours.toString()}:${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}';
+    }
+    else {
+      return '${minutes.toString().padLeft(2, '0')}:${secs.toString().padLeft(2, '0')}'; //formateo MM:SS
+    }
+    
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final elapsed = context.watch<ActiveSessionProvider>().elapsed;
+    return Text(
+      _formatTime(elapsed.inSeconds),
+      style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w400, color: Colors.white),
+    );
+  }
+}
+
+
+
+class SessionHeaderBar extends StatelessWidget {
+  const SessionHeaderBar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<ActiveSessionProvider>();
+
+    return SafeArea(
+      bottom: false,
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(8)
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+
+            IconButton(
+              onPressed: () {
+                //TODO minimize
+              },
+              icon: const Icon(Icons.close_fullscreen)
+            ),
+
+            const SessionTimer(),
+
+            Padding(
+              padding: EdgeInsetsGeometry.directional(end: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '${provider.completedExercises}/${provider.totalExercises} Exercises',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+
+                  SizedBox(height: 8),
+
+                  SizedBox(
+                    width: 100,
+                    child: LinearProgressIndicator(value: provider.progress),
+                  )
+                ],
+              )
+            )
+          ],
+        ),
+      )
+    );
+  }
+}
+
+
+
+class SetRow extends StatelessWidget {
+  final PerformedSet set;
+  final int idx;
+  final String exId;
+  final bool bodyweight;
+
+  const SetRow({
+    super.key,
+    required this.set,
+    required this.idx,
+    required this.exId,
+    required this.bodyweight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.read<ActiveSessionProvider>();
+
+    return Padding(
+      padding:EdgeInsetsGeometry.symmetric(vertical: 8, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          
+          Text('${idx + 1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),),
+
+          SizedBox(
+            width: 64,
+            height: 42,
+            child: TextFormField(
+              initialValue: set.reps.toString(),
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              onChanged: (val) => provider.updateReps(exId, idx, int.tryParse(val) ?? 0),
+            ),
+          ),
+
+          if (!bodyweight)
+            SizedBox(
+              width: 72,
+              height: 42,
+              child: TextFormField(
+                initialValue: set.weight?.toString() ?? '',
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                textAlign: TextAlign.center,
+                onChanged: (val) => provider.updateWeight(exId, idx, double.tryParse(val)),
+              ),
+            ),
+
+          Checkbox(
+            value: set.done,
+            onChanged: (val) => provider.toggleSet(exId, idx, val ?? false)
+          )
+        ],
+      ) 
+    );
+  }
+}
+
+
+
+

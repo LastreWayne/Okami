@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:okami/models/exercise_model.dart';
 import 'package:okami/models/routine_model.dart';
+import 'package:okami/providers/active_session_provider.dart';
 import 'package:okami/providers/workout_provider.dart';
 import 'package:okami/utils/string_extensions.dart';
 import 'package:provider/provider.dart';
@@ -98,10 +99,11 @@ class StartingRoutineScreen extends StatelessWidget {
               width: double.infinity,
               child: FilledButton.icon(
                 onPressed: () {
+                  context.read<ActiveSessionProvider>().start(routine, exercises);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ActiveRoutineScreen(routine: routine), 
+                      builder: (context) => ActiveRoutineScreen(), 
                     ),
                   );
                 },

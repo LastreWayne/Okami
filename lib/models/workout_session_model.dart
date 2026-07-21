@@ -1,11 +1,15 @@
 
 class PerformedSet {
+  static const _sentinel = Object();
+  
+  final String id;
   final int reps;
   final double? weight;
-  final int? durationSeconds;
+  final int durationSeconds;
   final bool done;
 
   PerformedSet({
+    required this.id,
     required this.reps,
     this.weight ,
     this.durationSeconds = 0,
@@ -14,13 +18,14 @@ class PerformedSet {
 
   PerformedSet copyWith({
     int? reps,
-    double? weight,
+    Object? weight = _sentinel,
     int? durationSeconds,
     bool? done,
   }) {
     return PerformedSet(
+      id: id,
       reps: reps ?? this.reps,
-      weight: weight ?? this.weight,
+      weight: identical(weight, _sentinel) ? this.weight : weight as double?,
       durationSeconds: durationSeconds ?? this.durationSeconds,
       done: done ?? this.done
     );
@@ -29,6 +34,7 @@ class PerformedSet {
 
   //Persistencia
   Map<String, dynamic> toJson() => {
+    'id': id,
     'reps': reps,
     'weight': weight,
     'durationSeconds': durationSeconds,
@@ -36,9 +42,10 @@ class PerformedSet {
   };
 
   factory PerformedSet.fromJson(Map<String, dynamic> json) => PerformedSet(
+    id: json['id'] as String,
     reps: json['reps'] as int,
     weight: (json['weight'] as num?)?.toDouble(),
-    durationSeconds: json['durationSeconds'] as int?,
+    durationSeconds: json['durationSeconds'] as int? ?? 0,
     done: json['done'] as bool
   );
 }
